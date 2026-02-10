@@ -13,7 +13,9 @@
             --card: #ffffff;
             --text: #2c3e50;
             --success: #27ae60;
+            --warning: #f39c12;
             --error: #c0392b;
+            --neutral: #95a5a6;
         }
 
         body {
@@ -41,7 +43,7 @@
         .header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 20px;
+            padding: 15px 20px;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -52,31 +54,58 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 10px;
         }
 
         .app-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             margin: 0;
             display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-direction: column;
+        }
+        
+        .user-rank {
+            font-size: 0.8rem;
+            background-color: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 2px;
+            width: fit-content;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
 
-        .user-stats {
+        /* DASHBOARD MINI */
+        .dashboard-mini {
             display: flex;
-            gap: 15px;
-            font-size: 0.9rem;
-            background: rgba(255,255,255,0.1);
-            padding: 5px 12px;
-            border-radius: 20px;
+            gap: 10px;
+            width: 100%;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.2);
+            padding: 8px;
+            border-radius: 8px;
         }
+
+        .dash-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            font-size: 0.8rem;
+        }
+
+        .dash-value { font-weight: bold; font-size: 1.1rem; }
+        .dash-label { opacity: 0.8; font-size: 0.7rem; }
 
         /* MENU DE MÓDULOS */
         .module-grid {
             padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Mais largo para caber info */
             gap: 15px;
         }
 
@@ -89,42 +118,74 @@
             transition: all 0.2s;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+            border-left: 6px solid var(--neutral); /* Cor padrão */
         }
 
         .module-card:hover {
             transform: translateY(-3px);
-            border-color: var(--secondary);
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Cores de Status dos Cards */
+        .card-good { border-left-color: var(--success); background: #f0fdf4; }
+        .card-avg { border-left-color: var(--warning); background: #fefce8; }
+        .card-bad { border-left-color: var(--error); background: #fef2f2; }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
         }
 
         .module-title {
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 5px;
+            font-size: 1.05rem;
         }
 
         .module-meta {
             font-size: 0.8rem;
             color: #7f8c8d;
+            margin-bottom: 5px;
         }
 
-        .progress-mini {
-            height: 4px;
+        .performance-badge {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
             background: #eee;
-            margin-top: 10px;
-            border-radius: 2px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .perf-good { background: #dcfce7; color: #166534; }
+        .perf-avg { background: #fef9c3; color: #854d0e; }
+        .perf-bad { background: #fee2e2; color: #991b1b; }
+
+        .progress-mini {
+            height: 6px;
+            background: rgba(0,0,0,0.05);
+            margin-top: auto;
+            border-radius: 3px;
+            overflow: hidden;
         }
         .progress-mini-bar {
             height: 100%;
-            background: var(--success);
+            background: var(--neutral);
             width: 0%;
+            transition: width 0.5s ease;
         }
 
         /* QUIZ INTERFACE */
         .quiz-container {
             padding: 20px;
             flex: 1;
-            display: none; /* Hidden by default */
+            display: none;
         }
 
         .quiz-container.active { display: block; }
@@ -166,17 +227,8 @@
 
         .option-btn:hover { border-color: var(--secondary); background: #f8fbff; }
         
-        .option-btn.correct { 
-            border-color: var(--success); 
-            background-color: #e8f5e9; 
-            color: #1e6c38;
-        }
-        
-        .option-btn.wrong { 
-            border-color: var(--error); 
-            background-color: #fcebeb; 
-            color: #c0392b;
-        }
+        .option-btn.correct { border-color: var(--success); background-color: #e8f5e9; color: #1e6c38; }
+        .option-btn.wrong { border-color: var(--error); background-color: #fcebeb; color: #c0392b; }
 
         /* FEEDBACK CARD */
         .feedback-card {
@@ -248,7 +300,7 @@
         .hidden { display: none !important; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* MODAL DE CONFIGURAÇÃO DE CICLO */
+        /* MODAL */
         .cycle-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -292,22 +344,31 @@
     <div class="header">
         <div class="header-top">
             <div class="app-title">
-                <span>🏛️</span> Missão Catende
-            </div>
-            <div class="user-stats">
-                <span id="global-xp">XP: 0</span>
-                <span id="global-level">Nível: Inscrito</span>
+                <div>🏛️ Missão Catende</div>
+                <div id="rank-badge" class="user-rank">Inscrito</div>
             </div>
         </div>
-        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 5px;">
-            Conhecimentos Regionais • Foco Banca
+        
+        <div class="dashboard-mini">
+            <div class="dash-item" style="color: #81ecec;">
+                <span class="dash-value" id="total-correct">0</span>
+                <span class="dash-label">Acertos</span>
+            </div>
+            <div class="dash-item" style="color: #ff7675;">
+                <span class="dash-value" id="total-wrong">0</span>
+                <span class="dash-label">Erros</span>
+            </div>
+            <div class="dash-item" style="color: #ffeaa7;">
+                <span class="dash-value" id="total-percent">0%</span>
+                <span class="dash-label">Desempenho</span>
+            </div>
         </div>
     </div>
 
     <div id="screen-menu">
         <div style="padding: 20px 20px 0 20px;">
-            <h3 style="margin: 0;">Cadernos de Questões</h3>
-            <p style="color: #666; font-size: 0.9rem;">Escolha um tópico para iniciar o ciclo.</p>
+            <h3 style="margin: 0;">Mapas Mentais & Questões</h3>
+            <p style="color: #666; font-size: 0.9rem;">As cores indicam onde você precisa focar.</p>
         </div>
         
         <div class="module-grid" id="module-list">
@@ -326,11 +387,8 @@
             <span id="q-topic">História</span>
         </div>
 
-        <div id="q-text" class="question-text">
-            </div>
-
-        <div id="q-options" class="options-list">
-            </div>
+        <div id="q-text" class="question-text"></div>
+        <div id="q-options" class="options-list"></div>
 
         <div id="q-feedback" class="feedback-card">
             <span class="feedback-title" id="fb-title">Comentário Estratégico</span>
@@ -381,20 +439,20 @@
 </div>
 
 <script>
-    /* --- BANCO DE DADOS (CONTEÚDO COMPLETO E REORDENADO) --- */
+    /* --- BANCO DE DADOS (TODOS OS ITENS) --- */
     const DB = {
         "item_i": {
             title: "Item I: História de Catende",
             questions: [
                 {id:1, q:"1. Analise as assertivas abaixo sobre o processo de ocupação territorial e fundação do município de Catende:<br>I. As terras que deram origem ao município foram adquiridas diretamente pelo Capitão Levino do Rêgo Barros junto à Coroa Portuguesa, através do sistema de sesmarias, em 1863.<br>II. O povoamento inicial consolidou-se ao redor do Engenho Milagre da Conceição, tendo como marco a realização da primeira feira e da primeira missa em 1874.<br>III. A historiografia oficial aponta a versão indígena para a etimologia do nome 'Catende' ('Mato que brilha' ou 'Caa tendi') como a prevalente, em detrimento da tese de origem africana ligada aos quilombos.<br><br>Estão CORRETAS:", options:["A) Apenas I e II", "B) Apenas II e III", "C) Apenas I e III", "D) I, II e III"], correct:1, comment:"Fundação: Povoamento em 1863 (Engenho Milagre), mas a vida social (missa/feira) é de 1874. Etimologia indígena é a oficial."},
                 {id:2, q:"2. Sobre a cronologia administrativa e a emancipação política de Catende, julgue os itens a seguir:<br>I. Antes de sua emancipação, Catende pertenceu administrativamente ao município de Palmares, tendo sido elevado à categoria de Vila em 1909.<br>II. A emancipação política, que elevou Catende à categoria de Cidade, ocorreu pela Lei Estadual nº 1.931, datada de 11 de setembro de 1928.<br>III. Atualmente, a configuração distrital do município é composta por três distritos: Catende (Sede), Laje Grande e Belém de Maria.<br><br>Estão CORRETAS:", options:["A) Apenas o item I é verdadeiro", "B) Apenas os itens I e II são verdadeiros", "C) Apenas os itens II e III são verdadeiros", "D) Todos os itens são verdadeiros"], correct:1, comment:"Cronologia: Vila em 1909 e Cidade em 11/09/1928. Belém de Maria foi distrito, mas hoje é cidade vizinha autônoma."},
-                {id:3, q:"3. A respeito do desenvolvimento econômico de Catende entre os séculos XIX e XX, considere:<br>I. A chegada da ferrovia em 1882 transformou Catende em uma 'ponta de linha' provisória por cerca de dois anos, forçando o comércio regional a se concentrar na localidade antes da expansão dos trilhos para Garanhuns.<br>II. A Usina Catende, sob o comando do Tenente Costa Azevedo, limitou-se à produção de açúcar, dependendo exclusivamente da malha ferroviária estatal (Great Western) para o transporte da cana, sem possuir infraestrutura própria de trilhos.<br>III. O poema 'Trem de Alagoas', de Ascenso Ferreira, imortalizou a importância logística da cidade com o verso 'Vou danado pra Catende', refletindo a ansiedade da chegada ao polo canavieiro.<br><br>Está(ão) INCORRETA(S):", options:["A) Apenas I", "B) Apenas II", "C) Apenas III", "D) Apenas II e III"], correct:1, comment:"Logística: A Usina tinha 140km de trilhos próprios (não dependia só da Great Western)."},
+                {id:3, q:"3. A respeito do desenvolvimento econômico de Catende entre os séculos XIX e XX, considere:<br>I. A chegada da ferrovia em 1882 transformou Catende em uma 'ponta de linha' provisória por cerca de dois anos, forçando o comércio regional a se concentrar na localidade antes da expansão dos trilhos para Garanhuns.<br>II. A Usina Catende, sob o comando do Tenente Costa Azevedo, limitou-se à produção de açúcar, dependendo exclusivamente da malha ferroviária estatal (Great Western) para o transporte da cana, sem possuir infraestrutura própria de trilhos.<br>III. O poema 'Trem de Alagoas', de Ascenso Ferreira, imortalizou a importância logística da cidade com o verso 'Vou danado pra Catende', refletindo a ansiedade da chegada ao polo canavieiro.<br><br>Está(ão) INCORRETA(S):", options:["A) Apenas I", "B) Apenas II", "C) Apenas III", "D) Apenas II e III"], correct:1, comment:"Logística: A Usina tinha 140km de trilhos próprios (não dependia só da Great Western). Ascenso Ferreira era de Palmares."},
                 {id:4, q:"4. O Hino e a Bandeira de Catende trazem elementos que narram a identidade do povo e da economia local. Sobre esses símbolos, é correto afirmar:<br>A) A data '1863', presente no topo da bandeira, faz referência ao ano de chegada do Capitão Levino e início do povoamento.<br>B) A letra do hino municipal é de autoria do Padre André Coopman, enquanto a melodia foi composta por Josibias Cavalcanti.<br>C) Na bandeira, a engrenagem azul simboliza a Usina Catende e o processo industrial, ladeada por ramos de cana-de-açúcar que representam a agricultura.<br>D) O trecho do hino 'Batalhão de voluntários' refere-se exclusivamente aos soldados enviados por Catende para a Guerra do Paraguai.", options:["A","B","C","D"], correct:2, comment:"Símbolos: Engrenagem = Indústria; Ramos = Cana; Cores Azul/Branco. A data na bandeira é 1928 (Emancipação)."},
                 {id:5, q:"5. Leia o trecho do poema de Ascenso Ferreira: 'Na boca da mata / há furnas incríveis / [...] / — Ali mora o Pai-da-Mata! / — Ali é a casa das caiporas!' Esse fragmento, associado aos aspectos geográficos de Catende, permite afirmar que:<br>I. O município está inserido na Zona da Mata Sul, região onde a vegetação nativa e o imaginário popular se fundem na identidade cultural.<br>II. As figuras do 'Pai-da-Mata' e das 'Caiporas' são elementos estranhos ao folclore pernambucano, tendo sido importados da cultura amazônica pela ferrovia.<br>III. A 'boca da mata' citada refere-se à transição entre a caatinga e o cerrado, biomas predominantes em Catende.<br><br>Estão CORRETAS:", options:["A) Apenas I", "B) Apenas I e II", "C) Apenas II e III", "D) I, II e III"], correct:0, comment:"Bioma: Catende é Mata Sul. Pai-da-Mata e Caiporas são ícones do imaginário local ligado aos canaviais."},
                 {id:6, q:"6. Sobre a formação administrativa de Catende, analise a cronologia abaixo e assinale a alternativa que apresenta a sequência CORRETA de eventos e legislações:<br>I. A elevação à categoria de Vila ocorreu em 1909, pela Lei Estadual n.º 991.<br>II. A criação do Distrito de Catende, ainda subordinado a Palmares, deu-se pela Lei Municipal n.º 1, em novembro de 1892.<br>III. A emancipação política e elevação à categoria de Cidade ocorreu em 11 de setembro de 1928, pela Lei Estadual n.º 1.931.", options:["A) II, depois I, depois III", "B) I, depois II, depois III", "C) III, depois II, depois I", "D) II, depois III, depois I"], correct:0, comment:"Evolução: Distrito (1892) ➔ Vila (1909) ➔ Cidade (1928). Decore essa escada administrativa!"},
                 {id:7, q:"7. Leia o trecho a seguir: 'A implantação das estradas de ferro em Pernambuco culminou na criação de novas áreas urbanas...' Com base no texto e nos conhecimentos sobre a história de Catende, assinale a alternativa que indica corretamente o ano de inauguração da estação local e a cidade que seria o destino final da linha, alcançado apenas em 1887:", options:["A) 1863 – Palmares", "B) 1874 – Caruaru", "C) 1882 – Garanhuns", "D) 1892 – Bom Conselho"], correct:2, comment:"Ferrovia: Catende foi 'ponta de linha' em 1882. A linha seguia para Garanhuns (Agreste)."},
                 {id:8, q:"8. Associe a figura histórica ao seu respectivo feito na construção de Catende:<br>(1) Senador Álvaro Barbalho Uchôa Cavalcanti<br>(2) Capitão Levino do Rêgo Barros<br>(3) Tenente Antônio Ferreira da Costa Azevedo<br><br>( ) Modernizou a Usina tornando-a a maior do Brasil e urbanizou a cidade (escolas, hospital) a partir da década de 1920.<br>( ) Recebeu as terras originais por doação do Imperador D. Pedro II e iniciou o fracionamento em sítios.<br>( ) Marco do povoamento em 1863 e organizador da primeira feira em 1874.<br>A sequência correta, de cima para baixo, é:", options:["A) 3, 2, 1", "B) 2, 1, 3", "C) 3, 1, 2", "D) 1, 2, 3"], correct:2, comment:"Figuras: 1-Costa Azevedo (Urbanismo); 2-Álvaro Barbalho (Terras); 3-Cap. Levino (Fundador)."},
-                {id:9, q:"9. Sobre a divisão territorial de Catende conforme os dados oficiais mais recentes, assinale a afirmativa VERDADEIRA:", options:["A) O município é composto atualmente por três distritos: Catende, Laje Grande e Belém de Maria", "B) Belém de Maria foi desmembrado em 1958, restando hoje apenas os distritos de Catende (Sede) e Laje Grande", "C) O distrito de Laje Grande foi extinto em 1963, restando apenas o distrito Sede", "D) Roçadinho é considerado, pela divisão administrativa do IBGE datada de 2023, um distrito oficial autônomo"], correct:1, comment:"Distritos: Atualmente Catende possui apenas dois distritos: Sede e Laje Grande."}, 
+                {id:9, q:"9. Sobre a divisão territorial de Catende conforme os dados oficiais mais recentes, assinale a afirmativa VERDADEIRA:", options:["A) O município é composto atualmente por três distritos: Catende, Laje Grande e Belém de Maria", "B) Belém de Maria foi desmembrado em 1958, restando hoje apenas os distritos de Catende (Sede) e Laje Grande", "C) O distrito de Laje Grande foi extinto em 1963, restando apenas o distrito Sede", "D) Roçadinho é considerado, pela divisão administrativa do IBGE datada de 2023, um distrito oficial autônomo"], correct:3, comment:"Distritos: Atualmente Catende possui apenas dois distritos: Sede e Laje Grande."},
                 {id:10, q:"10. Analise a bandeira de Catende descrita nos documentos oficiais e sua simbologia... Sobre os elementos descritos, é INCORRETO afirmar:", options:["A) A engrenagem azul representa a força da indústria, especificamente a Usina Catende", "B) Os ramos verdes representam a cana-de-açúcar, base da economia agrícola", "C) A data '1928' refere-se ao ano da inauguração da estação ferroviária pela Great Western", "D) As cores predominantes são o azul e o branco"], correct:2, comment:"Datas: A data 1928 na bandeira é da Emancipação, não da ferrovia."},
                 {id:11, q:"11. Sobre a origem do nome 'Catende', assinale a alternativa que apresenta a versão Indígena (prevalente nos registros antigos e considerada 'poética') e a versão Africana (defendida por historiadores recentes), RESPECTIVAMENTE:", options:["A) Casa de Farinha / Rio das Pedras", "B) Lugar de descanso / Quilombo forte", "C) Cana doce / Terra de pretos", "D) Mato que brilha/Caa tendi (Indígena) e Divindade das ervas/Katende (Africana)"], correct:3, comment:"Nomes: Indígena = Caa Tendi (Mato que brilha). Africana = Katende (Divindade das ervas)."},
                 {id:12, q:"12. No Hino de Catende, a autoria é dividida entre letra e melodia. Assinale a alternativa que indica corretamente os responsáveis pela obra:", options:["A) Letra de Josibias D. de Castro Cavalcanti e Melodia de Pe. André Coopman", "B) Letra de Pe. André Coopman e Melodia de Josibias D. de Castro Cavalcanti", "C) Letra e Melodia de Tenente Costa Azevedo", "D) Letra de Ascenso Ferreira e Melodia de Capiba"], correct:0, comment:"Hino: Letra de Josibias D. de Castro Cavalcanti e Melodia de Pe. André Coopman."}, 
@@ -442,7 +500,7 @@
                 {id:19, q:"19. Com base no resultado do SNISA (2023), o percentual da população de Catende atendida com rede de abastecimento de água foi de aproximadamente:", options:["A) 95% (universalizado)", "B) 67,75%", "C) 30,5%", "D) 10% (crítico)"], correct:1, comment:"Água: O atendimento de rede de abastecimento é de 67,75% (dado do SINISA). Não está universalizado!"},
                 {id:20, q:"20. Ao analisar a composição do Valor Adicionado Bruto (VAB) de Catende (2021), percebe-se a predominância de um setor específico que movimenta mais de 57% da economia local. Esse setor é:", options:["A) A Indústria de Transformação (Usinas)", "B) A Agropecuária (Cana-de-açúcar)", "C) A Administração Pública (Governo/Prefeitura)", "D) O Turismo Ecológico e Rural"], correct:2, comment:"VAB: O setor público (Administração) movimenta quase 58% da economia local."},
                 {id:21, q:"21. Apesar da história ligada à grande indústria açucareira, os dados atuais (2021) mostram que a participação da Indústria no VAB de Catende é:", options:["A) Superior a 50%", "B) De aproximadamente 34%", "C) De apenas 4,63%, evidenciando a desindustrialização", "D) Inexistente (0%)"], correct:2, comment:"Desindustrialização: A indústria, que já foi o forte (Usina), hoje representa apenas 4,63% do VAB."},
-                {id:22, q:"22. Sobre os indicadores educacionais de 2023, o IDEB de Catende para os Anos Iniciais do Ensino Fundamental na rede pública foi de:", options:["A) 6,5", "B) 4,5", "C) 2,8", "D) 8,0"], correct:1, comment:"Educação: O IDEB dos Anos Iniciais (2023) foi 4,5. Anote para não confundir com os anos finais, que é menor (3,8), segundo dados consolidados do IDEB."},
+                {id:22, q:"22. Sobre os indicadores educacionais de 2023, o IDEB de Catende para os Anos Iniciais do Ensino Fundamental na rede pública foi de:", options:["A) 6,5", "B) 4,5", "C) 2,8", "D) 8,0"], correct:1, comment:"Educação: O IDEB dos Anos Iniciais (2023) foi 4,5. Anote para não confundir com os anos finais, que é menor (3,7)."},
                 {id:23, q:"23. A Taxa de Mortalidade Infantil é um indicador sensível de desenvolvimento. Em Catende (2023), segundo dados do IBGE, essa taxa foi registrada em:", options:["A) 50,2 óbitos por mil nascidos vivos", "B) 10,02 óbitos por mil nascidos vivos", "C) 0,00", "D) 25,5 óbitos por mil nascidos vivos"], correct:1, comment:"Saúde: A mortalidade infantil (2023) foi de 10,02. Lembre que o dado da SEPLAG 2024 (5,06) é ainda melhor."},
                 {id:24, q:"24. O PIB per capita de Catende em 2023 foi calculado em R$ 12.130,70. No ranking estadual, essa marca coloca o município na posição:", options:["A) 10ª", "B) 50ª", "C) 339ª (dado impossível, pois há apenas 185 municípios)", "D) 130ª a 140ª"], correct:2, comment:"Lógica de Ranking: Pernambuco tem apenas 184 municípios. A posição '339ª' é impossível; é uma pegadinha de lógica."},
                 {id:25, q:"25. Qual foi o PIB per capita de Catende apurado em 2023?", options:["A) R$ 35.000,00", "B) R$ 12.130,70", "C) R$ 5.500,00", "D) R$ 22.400,00"], correct:1, comment:"Renda: O PIB per capita oficial registrado é de R$ 12.130,70."},
@@ -468,7 +526,7 @@
                 {id:10, q:"10. Segundo dados do Censo 2022 sobre a composição étnico-racial da população de Catende, o grupo majoritário, representando mais da metade dos habitantes (19.090 pessoas), autodeclara-se:", options:["A) Branca", "B) Preta", "C) Indígena", "D) Parda"], correct:3, comment:"Cor/Raça: Grupo majoritário é o Pardo (19.090 pessoas no Censo 2022)."},
                 {id:11, q:"11. A análise da estrutura econômica de Catende revela uma forte transformação ao longo das últimas décadas. Ao observar a composição do Valor Adicionado Bruto (VAB) em 2021, identifica-se que o setor de Indústria, outrora protagonista devido à usina, hoje ocupa uma posição coadjuvante. Qual é a participação aproximada deste setor na economia atual do município?", options:["A) Cerca de 34,28%", "B) Apenas 4,63%, evidenciando um processo de desindustrialização severa", "C) 57,78%", "D) 15,5%"], correct:1, comment:"Indústria: Apenas 4,63% do VAB. Catende sofreu forte desindustrialização."},
                 {id:12, q:"12. No contexto da hierarquia urbana e das redes de influência estabelecidas pelo IBGE e pela SEPLAG-PE, Catende desempenha um papel específico na Região de Desenvolvimento da Mata Sul. Assinale a alternativa que descreve corretamente essa classificação e sua relação com o polo regional:", options:["A) Catende é um Centro Sub-regional", "B) O município é classificado como Centro Local (nível 5), estando subordinado à influência direta da rede de Palmares", "C) Catende pertence à rede de influência de Vitória de Santo Antão", "D) A cidade é autossuficiente"], correct:1, comment:"Hierarquia: Classificação Centro Local (Nível 5), subordinado a Palmares."},
-                {id:13, q:"13. O Índice de Desenvolvimento da Educação Básica (IDEB) apresenta uma disparidade preocupante no desempenho da rede pública de Catende (2023). Ao comparar os Anos Iniciais (1º ao 5º) com os Anos Finais (6º ao 9º), observa-se que:", options:["A) O desempenho melhora nos anos finais", "B) A nota se mantém estável", "C) Há uma queda de rendimento, saindo de 4,5 nos anos iniciais para 3,8 nos anos finais", "D) O município não atingiu a nota mínima"], correct:2, comment:"IDEB (Ciclos): Queda preocupante: 4,5 (Iniciais) para 3,8 (Finais)."},
+                {id:13, q:"13. O Índice de Desenvolvimento da Educação Básica (IDEB) apresenta uma disparidade preocupante no desempenho da rede pública de Catende (2023). Ao comparar os Anos Iniciais (1º ao 5º) com os Anos Finais (6º ao 9º), observa-se que:", options:["A) O desempenho melhora nos anos finais", "B) A nota se mantém estável", "C) Há uma queda de rendimento, saindo de 4,5 nos anos iniciais para 3,7 nos anos finais", "D) O município não atingiu a nota mínima"], correct:2, comment:"IDEB (Ciclos): Queda preocupante: 4,5 (Iniciais) para 3,7 (Finais)."},
                 {id:14, q:"14. A dependência de receitas externas é um indicador crítico de sustentabilidade fiscal. Em 2024, Catende apresentou um grau de dependência de 91,07%. No ranking estadual de Pernambuco (composto por 185 municípios), essa situação coloca Catende na posição:", options:["A) 180ª", "B) 1ª", "C) 65ª, indicando que há cerca de 64 municípios com dependência ainda maior ou similar", "D) 150ª"], correct:2, comment:"Ranking Fiscal: Posição 65ª em dependência de receitas externas no estado."},
                 {id:15, q:"15. A frota de veículos é um indicador indireto de poder de compra e mobilidade. Segundo dados do Ministério dos Transportes/SENATRAN (2024) compilados pelo IBGE, a frota total de Catende é de:", options:["A) Menos de 2.000 veículos", "B) 10.355 veículos, o que coloca o município na 62ª posição no estado", "C) Mais de 30.000 veículos", "D) 5.500 veículos"], correct:1, comment:"Frota: 10.355 veículos (62ª posição no estado em 2024)."},
                 {id:16, q:"16. O Produto Interno Bruto (PIB) per capita é utilizado para medir a riqueza média. Em 2023, o PIB per capita de Catende foi de R$ 12.130,70. Comparando este valor com o cenário estadual e nacional, pode-se afirmar que:", options:["A) Catende está entre os 100 municípios mais ricos do Brasil", "B) O município ocupa a posição 339 no ranking estadual", "C) O município ocupa a posição 10.800 no ranking nacional", "D) O valor reflete uma economia de baixa renda, posicionando o município longe do topo tanto no ranking estadual quanto no nacional"], correct:3, comment:"Renda: PIB per capita de R$ 12.130,70 reflete economia de baixa/média renda."},
@@ -579,28 +637,45 @@
         }
     };
 
-    /* --- LÓGICA DA APLICAÇÃO --- */
+    /* --- LÓGICA DA APLICAÇÃO (ATUALIZADA) --- */
+    let currentModuleKey = null; // Armazena a chave do módulo atual (ex: 'item_i')
     let currentModule = null;
     let questionsQueue = [];
     let currentQuestionIndex = 0;
-    let score = 0;
-    let userXP = parseInt(localStorage.getItem('catende_xp') || '0');
+    let cycleScore = 0; // Pontuação apenas do ciclo atual
+
+    // Carregar dados persistentes
+    let globalCorrect = parseInt(localStorage.getItem('catende_correct') || '0');
+    let globalWrong = parseInt(localStorage.getItem('catende_wrong') || '0');
+    // Armazena estatísticas por módulo: { "item_i": {c: 10, w: 2}, ... }
+    let moduleStats = JSON.parse(localStorage.getItem('catende_module_stats') || '{}');
 
     function init() {
-        updateStats();
+        updateDashboardUI();
         renderModules();
     }
 
-    function updateStats() {
-        document.getElementById('global-xp').textContent = `XP: ${userXP}`;
-        
-        let level = "Inscrito";
-        if(userXP > 500) level = "Concurseiro";
-        if(userXP > 1500) level = "Aprovado";
-        if(userXP > 3000) level = "Nomeado";
-        if(userXP > 5000) level = "Estável";
-        
-        document.getElementById('global-level').textContent = `Nível: ${level}`;
+    function updateDashboardUI() {
+        // Atualiza números globais no Header
+        document.getElementById('total-correct').innerText = globalCorrect;
+        document.getElementById('total-wrong').innerText = globalWrong;
+
+        // Calcula Porcentagem Global
+        let totalAnswered = globalCorrect + globalWrong;
+        let percent = 0;
+        if (totalAnswered > 0) {
+            percent = Math.round((globalCorrect / totalAnswered) * 100);
+        }
+        document.getElementById('total-percent').innerText = `${percent}%`;
+
+        // Lógica de Níveis (Nova Régua de Dificuldade)
+        let rankName = "Inscrito";
+        if (globalCorrect >= 20) rankName = "Concurseiro";
+        if (globalCorrect >= 50) rankName = "Aprovado";
+        if (globalCorrect >= 100) rankName = "Nomeado";
+        if (globalCorrect >= 140) rankName = "Estável";
+
+        document.getElementById('rank-badge').innerText = rankName;
     }
 
     function renderModules() {
@@ -608,21 +683,67 @@
         grid.innerHTML = '';
 
         for (const [key, module] of Object.entries(DB)) {
+            // Pega estatísticas deste módulo específico
+            const stats = moduleStats[key] || {c: 0, w: 0};
+            const total = stats.c + stats.w;
+            let modPercent = 0;
+            let statusClass = ""; // Classe padrão (cinza)
+            let badgeClass = "";
+            let badgeText = "Sem dados";
+
+            if (total > 0) {
+                modPercent = Math.round((stats.c / total) * 100);
+                
+                // Define as cores com base no desempenho
+                if (modPercent >= 80) {
+                    statusClass = "card-good";
+                    badgeClass = "perf-good";
+                    badgeText = "Excelente";
+                } else if (modPercent >= 50) {
+                    statusClass = "card-avg";
+                    badgeClass = "perf-avg";
+                    badgeText = "Atenção";
+                } else {
+                    statusClass = "card-bad";
+                    badgeClass = "perf-bad";
+                    badgeText = "Crítico";
+                }
+            }
+
             const card = document.createElement('div');
-            card.className = 'module-card';
+            card.className = `module-card ${statusClass}`;
             card.onclick = () => openCycleModal(key);
             
             card.innerHTML = `
-                <div class="module-title">${module.title}</div>
+                <div class="module-header">
+                    <div class="module-title">${module.title}</div>
+                    ${total > 0 ? `<div class="performance-badge ${badgeClass}">${badgeText}</div>` : ''}
+                </div>
+                
                 <div class="module-meta">${module.questions.length} Questões disponíveis</div>
-                <div class="progress-mini"><div class="progress-mini-bar" style="width:0%"></div></div>
+                
+                <div style="font-size: 0.85rem; margin-top: 5px; color: #555;">
+                    Seu desempenho: <strong>${total > 0 ? modPercent + '%' : '-'}</strong>
+                </div>
+
+                <div class="progress-mini">
+                    <div class="progress-mini-bar" style="width:${modPercent}%; background-color: ${getBarColor(modPercent, total)}"></div>
+                </div>
             `;
             grid.appendChild(card);
         }
     }
 
+    function getBarColor(percent, total) {
+        if (total === 0) return "#ccc";
+        if (percent >= 80) return "var(--success)";
+        if (percent >= 50) return "var(--warning)";
+        return "var(--error)";
+    }
+
     /* --- CONTROLE DE CICLOS --- */
     function openCycleModal(moduleKey) {
+        currentModuleKey = moduleKey; // Salva a chave para uso posterior
         currentModule = DB[moduleKey];
         document.getElementById('modal-cycle').style.display = 'flex';
     }
@@ -638,15 +759,12 @@
         if (mode === 'all') {
             questionsQueue = [...currentModule.questions];
         } else {
-            // Pega as primeiras X questões (ou randomiza se preferir)
-            // Aqui faremos sequencial para estudo progressivo, ou random se já tiver feito muitas.
-            // Para simplicidade: random shuffle e pega X
             let shuffled = [...currentModule.questions].sort(() => 0.5 - Math.random());
             questionsQueue = shuffled.slice(0, mode);
         }
 
         currentQuestionIndex = 0;
-        score = 0;
+        cycleScore = 0;
 
         document.getElementById('screen-menu').classList.add('hidden');
         document.getElementById('screen-result').classList.add('hidden');
@@ -690,28 +808,41 @@
         const isCorrect = selectedIndex === q.correct;
         const feedbackCard = document.getElementById('q-feedback');
 
+        // Inicializa estatística do módulo se não existir
+        if (!moduleStats[currentModuleKey]) {
+            moduleStats[currentModuleKey] = { c: 0, w: 0 };
+        }
+
         if (isCorrect) {
             btnElement.classList.add('correct');
-            score++;
-            userXP += 100;
+            cycleScore++; 
+            globalCorrect++; 
+            moduleStats[currentModuleKey].c++; // Incrementa acerto do módulo
             
             feedbackCard.classList.add('success');
             document.getElementById('fb-title').innerText = "Correto! 🎯";
         } else {
             btnElement.classList.add('wrong');
-            allOpts[q.correct].classList.add('correct'); // Mostra a certa
+            allOpts[q.correct].classList.add('correct');
+            globalWrong++;
+            moduleStats[currentModuleKey].w++; // Incrementa erro do módulo
             
             feedbackCard.classList.add('error');
             document.getElementById('fb-title').innerText = "Atenção ao Erro 🛑";
         }
 
+        // Salvar tudo no Navegador
+        localStorage.setItem('catende_correct', globalCorrect);
+        localStorage.setItem('catende_wrong', globalWrong);
+        localStorage.setItem('catende_module_stats', JSON.stringify(moduleStats));
+        
+        // Atualizar Dashboard visualmente
+        updateDashboardUI();
+
         // Mostrar Comentário
         document.getElementById('fb-text').innerText = q.comment;
         feedbackCard.style.display = 'block';
         document.getElementById('btn-next').style.display = 'block';
-
-        localStorage.setItem('catende_xp', userXP);
-        updateStats();
     }
 
     function nextQuestion() {
@@ -735,7 +866,7 @@
 
         // Regra da Banca: Bloco de 5 vale 10 pontos (Peso 2)
         if (totalQ === 5) {
-            const grade = score * 2; // Acertos * 2
+            const grade = cycleScore * 2; // Acertos * 2
             finalDisplay = grade.toFixed(1);
             labelText = "Nota Final (0 a 10)";
             
@@ -743,10 +874,9 @@
             else if (grade >= 6) msg = "Bom, mas precisa revisar os erros.";
             else msg = "Cuidado. Reforce o estudo deste tópico.";
         } else {
-            // Porcentagem para outros tamanhos
-            const percent = Math.round((score / totalQ) * 100);
+            const percent = Math.round((cycleScore / totalQ) * 100);
             finalDisplay = `${percent}%`;
-            labelText = "Taxa de Acerto";
+            labelText = "Taxa de Acerto do Ciclo";
             
             if (percent >= 80) msg = "Domínio total do conteúdo!";
             else msg = "Continue treinando para subir essa média.";
@@ -757,33 +887,27 @@
         document.getElementById('final-msg').innerText = msg;
     }
 
-    /* --- NAVEGAÇÃO --- */
+    /* --- NAVEGAÇÃO E RESET --- */
     function goHome() {
         document.getElementById('screen-result').style.display = 'none';
         document.getElementById('screen-menu').classList.remove('hidden');
+        renderModules(); // Re-renderiza para atualizar as cores dos cards!
     }
 
     function retryCycle() {
-        // Reinicia com as mesmas questões ou novas, aqui reinicia o fluxo
         startQuiz(questionsQueue.length);
     }
 
     function resetApp() {
-        if(confirm("Deseja apagar todo o progresso e XP?")) {
+        if(confirm("Deseja ZERAR todas as estatísticas (Acertos, Erros e Nível)?")) {
             localStorage.clear();
             location.reload();
         }
     }
 
-    // Start
+    // Inicializar
     init();
-
 </script>
 
 </body>
 </html>
-
-
-
-
-
