@@ -6,9 +6,9 @@
     <title>Missão Catende - Concurso Público</title>
     <style>
         :root {
-            --primary: #003366; /* Azul Escuro Institucional */
+            --primary: #003366; 
             --secondary: #00509e;
-            --accent: #ff9900; /* Laranja (Referência ao Brasão/Arado) */
+            --accent: #ff9900; 
             --bg: #f4f6f8;
             --card: #ffffff;
             --text: #2c3e50;
@@ -79,7 +79,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* DASHBOARD MINI */
         .dashboard-mini {
             display: flex;
             gap: 10px;
@@ -105,7 +104,7 @@
         .module-grid {
             padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Mais largo para caber info */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
             gap: 15px;
         }
 
@@ -122,7 +121,7 @@
             flex-direction: column;
             justify-content: space-between;
             min-height: 120px;
-            border-left: 6px solid var(--neutral); /* Cor padrão */
+            border-left: 6px solid var(--neutral); 
         }
 
         .module-card:hover {
@@ -130,7 +129,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        /* Cores de Status dos Cards */
         .card-good { border-left-color: var(--success); background: #f0fdf4; }
         .card-avg { border-left-color: var(--warning); background: #fefce8; }
         .card-bad { border-left-color: var(--error); background: #fef2f2; }
@@ -201,7 +199,7 @@
         }
 
         .question-text {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.6;
             margin-bottom: 25px;
             font-weight: 500;
@@ -221,7 +219,7 @@
             text-align: left;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 1rem;
+            font-size: 0.95rem;
             position: relative;
         }
 
@@ -336,6 +334,23 @@
         .mode-btn:hover { border-color: var(--primary); color: var(--primary); }
         .mode-btn.highlight { border-color: var(--accent); background: #fffbf5; }
 
+        /* TABELAS PARA QUESTÕES */
+        .table-quiz {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .table-quiz th, .table-quiz td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        .table-quiz th {
+            background-color: #f0f2f5;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
@@ -371,8 +386,7 @@
             <p style="color: #666; font-size: 0.9rem;">As cores indicam onde você precisa focar.</p>
         </div>
         
-        <div class="module-grid" id="module-list">
-            </div>
+        <div class="module-grid" id="module-list"></div>
 
         <div style="text-align: center; padding: 20px;">
             <button onclick="resetApp()" style="background:none; border:none; color:#999; text-decoration:underline; cursor:pointer;">
@@ -400,13 +414,11 @@
 
     <div id="screen-result" class="result-screen hidden">
         <h2 id="result-title">Ciclo Finalizado!</h2>
-        
         <div id="score-display">
             <div class="score-label" id="score-label-text">Nota Final (Banca)</div>
             <div class="score-badge" id="final-score">8.0</div>
             <p id="final-msg" style="color: #666;">Ótimo desempenho!</p>
         </div>
-
         <div style="margin-top: 30px;">
             <button class="action-btn" onclick="goHome()">Voltar ao Menu</button>
             <button class="action-btn" style="background:white; color:var(--primary); border:1px solid var(--primary); margin-left:10px;" onclick="retryCycle()">Refazer Ciclo</button>
@@ -418,28 +430,23 @@
     <div class="modal-content">
         <h3>Configurar Ciclo</h3>
         <p>Como você deseja treinar este item?</p>
-        
         <button class="mode-btn highlight" onclick="startQuiz(5)">
             <strong>⚡ Ciclo Rápido (5 Questões)</strong><br>
             <span style="font-size:0.8rem">Vale 10 pontos (Peso 2)</span>
         </button>
-        
         <button class="mode-btn" onclick="startQuiz(10)">
             <strong>🧠 Ciclo Padrão (10 Questões)</strong><br>
             <span style="font-size:0.8rem">Estatística de Desempenho</span>
         </button>
-
         <button class="mode-btn" onclick="startQuiz('all')">
             <strong>🏆 Ciclo Completo (Todas)</strong><br>
             <span style="font-size:0.8rem">Simulado de Exaustão</span>
         </button>
-        
         <button onclick="closeModal()" style="margin-top:10px; background:none; border:none; color:#666; cursor:pointer;">Cancelar</button>
     </div>
 </div>
 
 <script>
-    /* --- BANCO DE DADOS (TODOS OS ITENS) --- */
     const DB = {
         "item_i": {
             title: "Item I: História de Catende",
@@ -452,7 +459,7 @@
                 {id:6, q:"6. Sobre a formação administrativa de Catende, analise a cronologia abaixo e assinale a alternativa que apresenta a sequência CORRETA de eventos e legislações:<br>I. A elevação à categoria de Vila ocorreu em 1909, pela Lei Estadual n.º 991.<br>II. A criação do Distrito de Catende, ainda subordinado a Palmares, deu-se pela Lei Municipal n.º 1, em novembro de 1892.<br>III. A emancipação política e elevação à categoria de Cidade ocorreu em 11 de setembro de 1928, pela Lei Estadual n.º 1.931.", options:["A) II, depois I, depois III", "B) I, depois II, depois III", "C) III, depois II, depois I", "D) II, depois III, depois I"], correct:0, comment:"Evolução: Distrito (1892) ➔ Vila (1909) ➔ Cidade (1928). Decore essa escada administrativa!"},
                 {id:7, q:"7. Leia o trecho a seguir: 'A implantação das estradas de ferro em Pernambuco culminou na criação de novas áreas urbanas...' Com base no texto e nos conhecimentos sobre a história de Catende, assinale a alternativa que indica corretamente o ano de inauguração da estação local e a cidade que seria o destino final da linha, alcançado apenas em 1887:", options:["A) 1863 – Palmares", "B) 1874 – Caruaru", "C) 1882 – Garanhuns", "D) 1892 – Bom Conselho"], correct:2, comment:"Ferrovia: Catende foi 'ponta de linha' em 1882. A linha seguia para Garanhuns (Agreste)."},
                 {id:8, q:"8. Associe a figura histórica ao seu respectivo feito na construção de Catende:<br>(1) Senador Álvaro Barbalho Uchôa Cavalcanti<br>(2) Capitão Levino do Rêgo Barros<br>(3) Tenente Antônio Ferreira da Costa Azevedo<br><br>( ) Modernizou a Usina tornando-a a maior do Brasil e urbanizou a cidade (escolas, hospital) a partir da década de 1920.<br>( ) Recebeu as terras originais por doação do Imperador D. Pedro II e iniciou o fracionamento em sítios.<br>( ) Marco do povoamento em 1863 e organizador da primeira feira em 1874.<br>A sequência correta, de cima para baixo, é:", options:["A) 3, 2, 1", "B) 2, 1, 3", "C) 3, 1, 2", "D) 1, 2, 3"], correct:2, comment:"Figuras: 1-Costa Azevedo (Urbanismo); 2-Álvaro Barbalho (Terras); 3-Cap. Levino (Fundador)."},
-                {id:9, q:"9. Sobre a divisão territorial de Catende conforme os dados oficiais mais recentes, assinale a afirmativa VERDADEIRA:", options:["A) O município é composto atualmente por três distritos: Catende, Laje Grande e Belém de Maria", "B) Belém de Maria foi desmembrado em 1958, restando hoje apenas os distritos de Catende (Sede), Roçadinho e Laje Grande", "C) O distrito de Laje Grande foi extinto em 1963, restando apenas o distrito Sede", "D) Roçadinho não é considerado, pela divisão administrativa do IBGE, datada de 2023, um distrito oficial de Catende"], correct:1, comment:"Atualmente Catende possui apenas três distritos: Catende (Sede), Roçadinho e Laje Grande."},
+                {id:9, q:"9. Sobre a divisão territorial de Catende conforme os dados oficiais mais recentes, assinale a afirmativa VERDADEIRA:", options:["A) O município é composto atualmente por três distritos: Catende, Laje Grande e Belém de Maria", "B) Belém de Maria foi desmembrado em 1958, restando hoje apenas os distritos de Catende (Sede), Roçadinho e Laje Grande", "C) O distrito de Laje Grande foi extinto em 1963, restando apenas o distrito Sede", "D) Roçadinho é considerado, pela divisão administrativa do IBGE datada de 2023, um distrito oficial autônomo"], correct:3, comment:"Distritos: Atualmente Catende possui apenas três distritos: Sede, Roçadinho e Laje Grande."}, 
                 {id:10, q:"10. Analise a bandeira de Catende descrita nos documentos oficiais e sua simbologia... Sobre os elementos descritos, é INCORRETO afirmar:", options:["A) A engrenagem azul representa a força da indústria, especificamente a Usina Catende", "B) Os ramos verdes representam a cana-de-açúcar, base da economia agrícola", "C) A data '1928' refere-se ao ano da inauguração da estação ferroviária pela Great Western", "D) As cores predominantes são o azul e o branco"], correct:2, comment:"Datas: A data 1928 na bandeira é da Emancipação, não da ferrovia."},
                 {id:11, q:"11. Sobre a origem do nome 'Catende', assinale a alternativa que apresenta a versão Indígena (prevalente nos registros antigos e considerada 'poética') e a versão Africana (defendida por historiadores recentes), RESPECTIVAMENTE:", options:["A) Casa de Farinha / Rio das Pedras", "B) Lugar de descanso / Quilombo forte", "C) Cana doce / Terra de pretos", "D) Mato que brilha/Caa tendi (Indígena) e Divindade das ervas/Katende (Africana)"], correct:3, comment:"Nomes: Indígena = Caa Tendi (Mato que brilha). Africana = Katende (Divindade das ervas)."},
                 {id:12, q:"12. No Hino de Catende, a autoria é dividida entre letra e melodia. Assinale a alternativa que indica corretamente os responsáveis pela obra:", options:["A) Letra de Josibias D. de Castro Cavalcanti e Melodia de Pe. André Coopman", "B) Letra de Pe. André Coopman e Melodia de Josibias D. de Castro Cavalcanti", "C) Letra e Melodia de Tenente Costa Azevedo", "D) Letra de Ascenso Ferreira e Melodia de Capiba"], correct:0, comment:"Hino: Letra de Josibias D. de Castro Cavalcanti e Melodia de Pe. André Coopman."}, 
@@ -505,22 +512,17 @@
                 {id:24, q:"24. O PIB per capita de Catende em 2023 foi calculado em R$ 12.130,70. No ranking estadual, essa marca coloca o município na posição:", options:["A) 10ª", "B) 50ª", "C) 339ª (dado impossível, pois há apenas 185 municípios)", "D) 130ª a 140ª"], correct:2, comment:"Lógica de Ranking: Pernambuco tem apenas 184 municípios. A posição '339ª' é impossível; é uma pegadinha de lógica."},
                 {id:25, q:"25. Qual foi o PIB per capita de Catende apurado em 2023?", options:["A) R$ 35.000,00", "B) R$ 12.130,70", "C) R$ 5.500,00", "D) R$ 22.400,00"], correct:1, comment:"Renda: O PIB per capita oficial registrado é de R$ 12.130,70."},
                 {id:26, q:"26. Um dado alarmante para a gestão municipal é o grau de dependência de receitas externas (FPM, repasses). Em 2024, esse índice em Catende foi de:", options:["A) 20%", "B) 50%", "C) 75,5%", "D) 91,07% (altíssima dependência)."], correct:3, comment:"Dependência: O índice de dependência externa de 91,07% é um dos mais altos da região."},
-{
-    id: 27, 
-    q: "27. Sobre as características geográficas e socioeconômicas da Região de Desenvolvimento da Mata Sul (RD 10), onde se localiza o município de Catende, analise as afirmações abaixo:<br><br><b>I.</b> A região é conhecida como 'Mata Úmida', sendo mais exposta aos ventos úmidos de sudeste, o que estabelece climas do tipo Tropical Quente e Úmido e Tropical Quente Subúmido Seco, com temperaturas médias anuais superiores a 24ºC.<br><br><b>II.</b> O relevo regional apresenta como principais unidades o Planalto da Borborema e as Colinas da Zona da Mata. Embora a média regional de altitude seja de 210m, o município de Catende destaca-se por possuir, junto a Jaqueira e Maraial, as áreas de relevo mais acentuado da região, classificadas tecnicamente como relevo montanhoso e escarpado.<br><br><b>III.</b> A vegetação da Mata Sul é homogênea e composta exclusivamente por espécies de Caatinga Hipoxerófila, devido ao baixo índice pluviométrico da bacia do Rio Una, que apresenta águas predominantemente intermitentes no trecho que corta o centro urbano de Catende.<br><br>Somente está CORRETO o que se afirma em:", 
-    options: ["A) I e II", "B) II e III", "C) I e III", "D) I, II e III"], 
-    correct: 0, 
-    comment: "Clima/Relevo: A região é 'Mata Úmida' (Temp > 24°C). Catende tem o relevo mais acidentado (montanhoso/escarpado). O item III erra a vegetação, que é predominantemente Mata Atlântica."
-}                {id:28, q:"28. A Tabela 1 apresenta a média de precipitação anual consolidada em um período de 30 anos... As regiões I, II, III e IV correspondem, respectivamente, às seguintes unidades geográficas:", options:["A) Mata Sul – Região Metropolitana – Sertão – Agreste", "B) Região Metropolitana – Mata Sul – Agreste – Sertão", "C) Região Metropolitana – Mata Sul – Sertão – Agreste", "D) Mata Sul – Agreste – Sertão – Região Metropolitana"], correct:1, comment:"Pluviometria: RMR (>2200mm); Mata Sul (1500-1800mm); Agreste (700-1000mm); Sertão (<600mm)."},
-                {id:29, q:"29. A caracterização do relevo é um fator determinante para a ocupação do solo... Assinale a alternativa que apresenta a sequência correta (V para verdadeiro e F para falso):", options:["A) F – V – V", "B) V – F – V", "C) F – V – F", "D) V – V – F"], correct:0, comment:"Relevo Técnico: Catende NÃO é plana (Item I falso). Possui relevo acidentado (Item II) e a média da RD é ondulada (Item III)."},
-                {id:30, q:"30. [ADAPTADA – Unificado de Pernambuco, 2025, Gestor Governamental] A Tabela 1 apresenta a média de precipitação... As regiões I, II, III e IV correspondem, respectivamente, às seguintes unidades geográficas:", options:["A) Agreste – RMR – Sertão – Mata", "B) Mata – RMR – Sertão – Agreste", "C) RMR – Mata – Agreste – Sertão", "D) RMR – Agreste – Mata – Sertão"], correct:2, comment:"Precipitação: I: RMR (mais chuvosa); II: Mata (Catende); III: Agreste; IV: Sertão (menos chuvosa)."}
+                {id:27, q:"27. Sobre as características geográficas e socioeconômicas da Região de Desenvolvimento da Mata Sul (RD 10), onde se localiza o município de Catende, analise as afirmações abaixo:<br><br><b>I.</b> A região é conhecida como 'Mata Úmida', sendo mais exposta aos ventos úmidos de sudeste, o que estabelece climas do tipo Tropical Quente e Úmido e Tropical Quente Subúmido Seco, com temperaturas médias anuais superiores a 24ºC.<br><br><b>II.</b> O relevo regional apresenta como principais unidades o Planalto da Borborema e as Colinas da Zona da Mata. Embora a média regional de altitude seja de 210m, o município de Catende destaca-se por possuir, junto a Jaqueira e Maraial, as áreas de relevo mais acentuado da região, classificadas tecnicamente como relevo montanhoso e escarpado.<br><br><b>III.</b> A vegetação da Mata Sul é homogênea e composta exclusivamente por espécies de Caatinga Hipoxerófila, devido ao baixo índice pluviométrico da bacia do Rio Una, que apresenta águas predominantemente intermitentes no trecho que corta o centro urbano de Catende.<br><br>Somente está CORRETO o que se afirma em:", options:["A) I e II", "B) II e III", "C) I e III", "D) I, II e III"], correct:0, comment:"Clima/Relevo: A região é 'Mata Úmida' (Temp > 24°C). Catende tem o relevo mais acidentado (montanhoso/escarpado). O item III erra a vegetação, que é predominantemente Mata Atlântica."},
+                {id:28, q:"28. A Tabela 1 apresenta a média de precipitação anual consolidada em um período de 30 anos em quatro diferentes Regiões de Desenvolvimento (RD) do Estado de Pernambuco. Considere que o município de Catende está localizado na RD Mata Sul, região tecnicamente denominada como 'Mata Úmida'.<br><br><table class='table-quiz'><tr><th>Perfil Regional</th><th>Média de Chuvas (mm/ano)</th><th>Característica Predominante</th></tr><tr><td>I</td><td>> 2.200 mm</td><td>Clima Tropical Litorâneo Úmido</td></tr><tr><td>II</td><td>1.500 mm a 1.800 mm</td><td>Clima Tropical Quente e Úmido</td></tr><tr><td>III</td><td>700 mm a 1.000 mm</td><td>Transição (Zona de Transferência)</td></tr><tr><td>IV</td><td>< 600 mm</td><td>Clima Semiárido (B-tipo)</td></tr></table><br>As regiões I, II, III e IV correspondem, respectivamente, às seguintes unidades geográficas:", options:["A) Mata Sul – Região Metropolitana – Sertão – Agreste", "B) Região Metropolitana – Mata Sul – Agreste – Sertão", "C) Região Metropolitana – Mata Sul – Sertão – Agreste", "D) Mata Sul – Agreste – Sertão – Região Metropolitana"], correct:1, comment:"Pluviometria: RMR (>2200mm); Mata Sul (1500-1800mm); Agreste (700-1000mm); Sertão (<600mm)."},
+                {id:29, q:"29. A caracterização do relevo é um fator determinante para a ocupação do solo e o desenvolvimento econômico regional. Com base nos dados técnicos fornecidos pela Embrapa e pela Secretaria de Planejamento de Pernambuco (Seplag) sobre a Zona da Mata Sul (RD 10), julgue as afirmativas a seguir:<br><br><b>I.</b> O relevo de Catende é predominantemente plano (declividade entre 0-3%), facilitando a mecanização integral da lavoura de cana-de-açúcar em toda a extensão do município.<br><b>II.</b> Catende, juntamente com os municípios de Amaraji, Jaqueira e Maraial, compreende a maior parte das áreas de relevo mais acentuado da RD 10, apresentando feições classificadas como montanhosas e escarpadas.<br><b>III.</b> A declividade média da Zona da Mata Sul encontra-se em torno de 15%, sendo que aproximadamente metade da área total da região (48,3%) apresenta relevo do tipo ondulado.<br><br>Assinale a alternativa que apresenta a sequência correta (V para verdadeiro e F para falso):", options:["A) F – V – V", "B) V – F – V", "C) F – V – F", "D) V – V – F"], correct:0, comment:"Relevo Técnico: Catende NÃO é plana (Item I falso). Possui relevo acidentado (Item II) e a média da RD é ondulada (Item III)."},
+                {id:30, q:"30. [ADAPTADA – Unificado de Pernambuco, 2025, Gestor Governamental] A Tabela 1 apresenta a média de precipitação em um período de 30 anos em quatro regiões do Estado de Pernambuco. Considere RMR = Região Metropolitana de Recife.<br><br><b>Tabela 1 – Precipitação Média (mm)</b><br><table class='table-quiz'><tr><th>Mês</th><th>Região I</th><th>Região II</th><th>Região III</th><th>Região IV</th></tr><tr><td>ANUAL</td><td>2074,7</td><td>1313,9</td><td>777,3</td><td>621,5</td></tr></table><br><i>(Tabela resumida com totais anuais para agilizar a leitura)</i><br><br>As regiões I, II, III e IV correspondem, respectivamente, às seguintes unidades geográficas:", options:["A) Agreste – RMR – Sertão – Mata", "B) Mata – RMR – Sertão – Agreste", "C) RMR – Mata – Agreste – Sertão", "D) RMR – Agreste – Mata – Sertão"], correct:2, comment:"Precipitação: I: RMR (mais chuvosa); II: Mata (Catende); III: Agreste; IV: Sertão (menos chuvosa)."}
             ]
         },
         "item_iii": {
             title: "Item III: Aspectos Demográficos",
             questions: [
                 {id:1, q:"1. De acordo com os dados definitivos do Censo Demográfico de 2022 divulgados pelo IBGE, o município de Catende registrou uma população residente total de:", options:["A) Aproximadamente 18.000 habitantes", "B) Exatos 32.156 habitantes", "C) Mais de 54.000 habitantes", "D) Cerca de 10.300 habitantes"], correct:1, comment:"População: Catende possui 32.156 habitantes. Lembre-se que é a 3ª maior do interior da região."},
-                {id:2, q:"2. A densidade demográfica é um indicador que revela a concentração populacional no território. Considerando a área territorial de aproximadamente 209 km² e a população apurada em 2022, a densidade demográfica de Catende é de:", options:["A) 49,74 hab/km²", "B) 154,16 hab/km²", "C) 398,38 hab/km²", "D) 70,66 hab/km²"], correct:1, comment:"Densidade: Razão de 154,16 hab/km². Alta concentração para o tamanho do território."},
+                {id:2, q:"2. A densidade demográfica é um indicador que révèle a concentração populacional no território. Considerando a área territorial de aproximadamente 209 km² e a população apurada em 2022, a densidade demográfica de Catende é de:", options:["A) 49,74 hab/km²", "B) 154,16 hab/km²", "C) 398,38 hab/km²", "D) 70,66 hab/km²"], correct:1, comment:"Densidade: Razão de 154,16 hab/km². Alta concentração para o tamanho do território."},
                 {id:3, q:"3. A organização espacial da população entre as zonas urbana e rural é determinante para o planejamento de políticas públicas. Segundo o Censo 2022, a taxa de urbanização de Catende é de 78,5%. Esse dado indica que:", options:["A) O município é predominantemente rural", "B) A população está equilibrada igualmente", "C) A cidade possui uma das menores taxas de urbanização", "D) A grande maioria da população (quase 8 em cada 10 habitantes) reside na zona urbana"], correct:3, comment:"Urbanização: Taxa de 78,5%. Quase 8 em cada 10 catendenses moram na cidade."},
                 {id:4, q:"4. O Índice de Desenvolvimento Humano Municipal (IDH-M) é uma medida resumida do desenvolvimento humano a longo prazo. O último dado oficial consolidado (2010) atribui a Catende um IDH-M de 0,609. Essa pontuação classifica o município na faixa de:", options:["A) Muito Baixo Desenvolvimento Humano", "B) Médio Desenvolvimento Humano", "C) Alto Desenvolvimento Humano", "D) Muito Alto Desenvolvimento Humano"], correct:1, comment:"IDH-M: O valor de 0,609 enquadra o município na faixa de Médio Desenvolvimento."},
                 {id:5, q:"5. Ao analisar a composição do Valor Adicionado Bruto (VAB) de Catende em 2021, nota-se uma característica marcante da economia local pós-industrialização. Qual setor econômico possui a maior participação na geração de riqueza do município, com cerca de 57,78%?", options:["A) Indústria", "B) Agropecuária", "C) Administração Pública", "D) Serviços"], correct:2, comment:"VAB: A Administração Pública é o maior setor da economia (57,78%)."},
@@ -608,51 +610,44 @@
         "simulados": {
             title: "Simulados Gerais I-V",
             questions: [
-                // Simulado I
                 {id:1, q:"Simulado I - 1. Ao longo de sua formação histórica, Catende vivenciou profundas transformações... Acerca do tema, julgue as afirmativas a seguir:<br>( ) A emancipação política de Catende... marcou o desmembramento do território em relação ao município de Palmares...<br>( ) O povoamento da região é atribuído exclusivamente à instalação da Estação Ferroviária...<br>( ) O ciclo da cana-de-açúcar foi o grande motor econômico...<br>( ) A lenda da 'Mulher da Sombrinha'... tem suas raízes ligadas ao imaginário dos trabalhadores rurais...<br><br>Assinale a alternativa que apresenta a sequência correta:", options:["A) V – F – V – V", "B) F – V – F – F", "C) V – V – F – V", "D) F – F – V – F"], correct:0, comment:"V-F-V-V: O item II é falso porque o povoamento começou nos Engenhos (Milagre da Conceição) em 1863, bem antes da ferrovia (1882)."},
                 {id:2, q:"Simulado I - 2. Durante o século XX, a organização político-administrativa da região da Mata Sul pernambucana sofreu alterações... Sobre a formação territorial e a divisão administrativa de Catende, assinale a alternativa correta.", options:["A) O atual distrito de Roçadinho foi desmembrado de Catende e elevado à categoria de município autônomo em 1963", "B) O território de Catende pertencia originalmente ao município de Palmares, do qual foi desmembrado para se tornar município autônomo em 11 de setembro de 1928", "C) A localidade de Catende só foi elevada à categoria de cidade na década de 1950", "D) O município perdeu grande parte de seu território na década de 1990"], correct:1, comment:"Emancipação: Catende era o 'distrito rico' de Palmares devido à Usina e à Estação. A liberdade política veio em 11/09/1928."},
                 {id:3, q:"Simulado I - 3. Durante a organização administrativa do município no início do século XX, o território de Catende passou por mudanças de status e jurisdição antes de sua emancipação definitiva. Assinale a alternativa correta.", options:["A) O distrito de Catende passou a se chamar 'Vila da Usina'", "B) As vilas de Roçadinho e Jaqueira foram unidas", "C) 'Milagre da Conceição' foi o nome oficial dado ao distrito", "D) O distrito de Catende, que sediava a importante estação ferroviária e a usina, pertencia administrativamente ao município de Palmares até sua emancipação em 1928"], correct:3, comment:"Vínculo Histórico: Memorize que Catende foi 'filha' de Palmares administrativamente por décadas antes de se tornar cidade."},
                 {id:4, q:"Simulado I - 4. Com base na história da ocupação da região da Mata Sul e na presença indígena no território onde hoje se situa Catende, assinale a alternativa correta.", options:["A) A região de Catende manteve aldeamentos indígenas intactos até o século XX", "B) A área era historicamente habitada por povos como os Caetés, mas a intensa implantação da monocultura canavieira e a colonização resultaram na desestruturação dessas comunidades, restando hoje uma população indígena autodeclarada muito reduzida (cerca de 24 pessoas no Censo 2022)", "C) Os índios Fulni-ô migraram de Águas Belas", "D) Os povos originários da região desapareceram por completo"], correct:1, comment:"Povos Originários: A monocultura da cana e a ferrovia desestruturaram os grupos indígenas locais. O Censo 2022 registra apenas 24 indígenas autodeclarados."},
                 {id:5, q:"Simulado I - 5. Sobre os atos legislativos que definiram a organização administrativa e a emancipação do município de Catende, assinale a alternativa correta.", options:["A) O distrito de Roçadinho foi elevado à categoria de município", "B) A Lei Municipal nº 2, de 1892, transferiu a sede", "C) O distrito de Catende foi criado em 1995", "D) A localidade foi elevada à categoria de município autônomo pela Lei Estadual nº 1.931, de 11 de setembro de 1928, desmembrando-se de Palmares"], correct:3, comment:"Lei da Cidade: A Lei Estadual nº 1.931 é a certidão de nascimento de Catende como município autônomo. Grave este número e a data: 11/09/1928."},
-                // Simulado II
                 {id:6, q:"Simulado II - 1. O município de Catende... alcançou sua autonomia política já no período Republicano. Assinale a alternativa correta quanto a esse processo.", options:["A) O município foi emancipado em 1882", "B) Catende tornou-se município após a criação do distrito de Roçadinho", "C) A emancipação se deu com a falência da Usina Catende", "D) A emancipação política de Catende ocorreu em 11 de setembro de 1928, desmembrando-se do território de Palmares"], correct:3, comment:"Data de Ouro: Emancipação em 11 de setembro de 1928, desmembrando-se de Palmares."},
                 {id:7, q:"Simulado II - 2. A ocupação efetiva da região onde hoje está localizado o município de Catende remonta à expansão da agroindústria canavieira... Assinale a alternativa que apresenta corretamente um dos aspectos da formação histórica do município:", options:["A) A origem da população urbana de Catende está ligada à preservação integral das aldeias indígenas", "B) A emancipação política de Catende ocorreu no contexto da Primeira República (República Velha), em 1928, impulsionada pelo desenvolvimento econômico trazido pela ferrovia e pela indústria do açúcar", "C) O povoamento inicial da região teve início com a chegada das bandeiras paulistas", "D) Os primeiros habitantes da cidade foram colonos holandeses"], correct:1, comment:"Contexto: Ocorreu na Primeira República (República Velha). O motor do crescimento foi a união da Ferrovia com a Usina."},
-                {id:8, q:"Simulado II - 3. De acordo com as divisões territoriais e administrativas mais recentes registradas pelo IBGE e pela legislação estadual, assinale a alternativa correta sobre a composição do território de Catende:", options:["A) O município é constituído atualmente apenas pelo distrito sede", "B) O município é dividido administrativamente em três distritos: Catende (Sede), Roçadinho e Laje Grande", "C) O distrito de Jaqueira continua pertencendo legalmente a Catende", "D) O povoado de Roçadinho foi elevado à categoria de cidade"], correct:1, comment:"Divisão Distrital: Catende possui apenas três distritos oficiais: a Sede (Catende), Roçadinho e Laje Grande."},
+                {id:8, q:"Simulado II - 3. De acordo com as divisões territoriais e administrativas mais recentes registradas pelo IBGE e pela legislação estadual, assinale a alternativa correta sobre a composição do território de Catende:", options:["A) O município é constituído atualmente apenas pelo distrito sede", "B) O município é dividido administrativamente em dois distritos: Catende (Sede), Roçadinho e Laje Grande", "C) O distrito de Jaqueira continua pertencendo legalmente a Catende", "D) O povoado de Roçadinho foi elevado à categoria de cidade"], correct:1, comment:"Divisão Distrital: Catende possui apenas três distritos oficiais: a Sede (Catende), Roçadinho e Laje Grande."},
                 {id:9, q:"Simulado II - 4. Assinale a alternativa que apresenta corretamente o nome dessa propriedade que deu origem à denominação do município.", options:["A) Engenho Milagre da Conceição", "B) Engenho Catende", "C) Fazenda Roçadinho", "D) Vila de Sant'Ana da Mata"], correct:0, comment:"Origem histórica: O núcleo populacional (cidade) surgiu em torno do Engenho Milagre da Conceição, cujas terras foram cedidas para a construção da estação ferroviária."},
                 {id:10, q:"Simulado II - 5. Sobre o ciclo produtivo característico da colonização, assinale a alternativa correta.", options:["A) A formação do município está indissociavelmente ligada ao ciclo da cana-de-açúcar, evoluindo dos antigos banguês para a grande estrutura industrial da Usina Catende", "B) O povoamento da região começou com o ciclo da exploração de ouro", "C) O ciclo do gado extensivo foi o primeiro", "D) O ciclo do algodão foi o responsável"], correct:0, comment:"Evolução Econômica: Ciclo da Cana-de-açúcar. A cidade evoluiu do modelo de Engenho (Banguê) para o modelo de Usina (Industrial)."},
-                // Simulado III
                 {id:11, q:"Simulado III - 1. Assinale a alternativa que apresenta corretamente um dos aspectos dessa formação histórica.", options:["A) O povoamento inicial da região de Catende teve início com a chegada dos colonos portugueses no litoral em 1530", "B) O primeiro registro histórico do nome 'Catende' na imprensa data de 1832, no contexto da Guerra dos Cabanos", "C) A fundação do município de Catende ocorreu durante a República Velha com nomeação de prefeito", "D) Os primeiros habitantes foram bandeirantes"], correct:1, comment:"Primórdios: O nome 'Catende' aparece na imprensa em 1832 devido aos Cabanos, que se escondiam nas matas da região."},
                 {id:12, q:"Simulado III - 2. Um cidadão residente no município de Catende necessita de atendimento especializado... Assinale a alternativa que faz a correlação correta:<br>I. Equipe destinada a usuários com impossibilidade física de locomoção...<br>II. Unidade de assistência hospitalar com equipe multiprofissional...<br>III. Sistema responsável pelos agendamentos de consultas...", options:["A) I-SAMU; II-Policlínica Gouveia de Barros; III-Sisreg", "B) I-EMAD; II-Policlínica Gouveia de Barros; III-Sisreg", "C) I-EMAD; II-Posto de Saúde Central; III-CadÚnico", "D) I-Samu; II-Hospital Regional; III-Ouvidoria"], correct:1, comment:"Fluxo da Saúde: Guarde a sigla EMAD (Atenção Domiciliar) para pacientes acamados e Sisreg para o agendamento (regulação) de exames."},
                 {id:13, q:"Simulado III - 3. Sobre o 'Garantia Safra', é correto afirmar que o benefício é destinado ao agricultor familiar que perder sua safra em razão de:", options:["A) Pragas, incêndios ou falta de mão de obra", "B) Fenômenos da estiagem ou do excesso hídrico", "C) Queda nos preços de mercado", "D) Invasão de terras"], correct:1, comment:"Garantia Safra: O seguro é restrito a causas climáticas (seca/estiagem ou cheia/excesso hídrico)."},
                 {id:14, q:"Simulado III - 4. Assinale a alternativa que descreve corretamente a competência do Conselho do FUNDEB, diferenciando-o do Conselho Escolar.", options:["A) Tem por objetivo fortalecer e ampliar a participação da comunidade", "B) É responsável pela formação continuada", "C) Compete supervisionar a realização do Censo Escolar e acompanhar a aplicação dos recursos do PNATE", "D) Organiza o acervo da Biblioteca Pública"], correct:2, comment:"FUNDEB vs Escolar: O Conselho do FUNDEB tem um papel de 'auditoria' e supervisão financeira (Censo e PNATE). O Conselho Escolar é focado na comunidade e na gestão da unidade."},
                 {id:15, q:"Simulado III - 5. Sobre os canais de atendimento ao cidadão e serviços administrativos da Prefeitura de Catende, assinale a alternativa INCORRETA.", options:["A) O Ponto Cidadania realiza a emissão de RG", "B) O serviço de 'Atendimento ao Público' no Gabinete é realizado pela própria Prefeita", "C) A Secretaria de Finanças concede isenção de IPTU para Lojas Maçônicas", "D) O Arquivo Municipal funciona dentro da Secretaria de Saúde e guarda apenas prontuários médicos antigos"], correct:3, comment:"Incorreta: O Arquivo Municipal é o guardião da memória administrativa e documental de toda a prefeitura, e não um anexo exclusivo da Saúde."},
-                // Simulado IV
                 {id:16, q:"Simulado IV - 1. Com a promulgação da Emenda à Lei Orgânica nº 14... analise os itens:<br>( ) A contagem de prazos... passa a computar-se apenas em dias úteis...<br>( ) O recesso parlamentar de final de ano... ocorre taxativamente de 20 de dezembro a 01 de janeiro<br>( ) O segundo período de suspensão de prazos... compreende o intervalo de 16 de junho a 14 de julho<br><br>Assinale a sequência correta:", options:["A) V – F – V", "B) V – V – F", "C) F – F – V", "D) V – F – F"], correct:0, comment:"Prazos (Emenda 14/26): Catende adotou os Dias Úteis. Recessos: 16/12 a 14/01 e 16/06 a 14/07."},
                 {id:17, q:"Simulado IV - 2. Assinale a alternativa que apresenta APENAS municípios que fazem limite territorial direto com Catende.", options:["A) Palmares, Caruaru, Jaqueira e Recife", "B) Palmares, Bonito, Maraial, Jaqueira, Belém de Maria e Lagoa dos Gatos", "C) Água Preta, Garanhuns, Ribeirão e Cortês", "D) Palmares, Xexéu, Barreiros e Tamandaré"], correct:1, comment:"Limites: Memorize o 'cinturão' de vizinhos: Palmares, Bonito, Maraial, Jaqueira, Belém de Maria e Lagoa dos Gatos."},
                 {id:18, q:"Simulado IV - 3. Sobre o Hino e a Bandeira de Catende, julgue as afirmativas:<br>1. A Bandeira Municipal ostenta, em seu centro, a data de '11 de setembro de 1928'.<br>2. A letra do Hino de Catende é de autoria de Capiba.<br>3. A melodia do Hino foi composta pelo Padre André Coopman.<br><br>Estão corretas:", options:["A) Apenas 1 e 2", "B) Apenas 2 e 3", "C) Apenas 1 e 3", "D) 1, 2 e 3"], correct:2, comment:"Hino e Bandeira: 1) Data na bandeira: 1928 2) Letra: Josibias Cavalcanti. 3) Melodia: Pe. André Coopman. (Capiba não tem ligação)."},
                 {id:19, q:"Simulado IV - 4. Segundo o texto oficial dos serviços municipais, NÃO faz parte do rol de entidades explicitamente citadas para isenção de IPTU:", options:["A) Lojas Maçônicas", "B) Clubes de Serviços (ex: Rotary, Lions)", "C) Sindicatos", "D) Empresas de Transporte Coletivo Interestadual"], correct:3, comment:"IPTU: As isenções são para entidades de relevância social: Lojas Maçônicas, Clubes de Serviços (Rotary/Lions) e Sindicatos."},
                 {id:20, q:"Simulado IV - 5. Considere os aspectos históricos... Assinale a alternativa que preenche corretamente a lacuna sobre a afiliação administrativa original:", options:["A) Catende era o 2º Distrito de Água Preta", "B) Catende era o 3º Distrito de Palmares", "C) Catende era uma Vila subordinada a Bonito", "D) Catende era o Distrito Sede de Maraial"], correct:1, comment:"Vínculo Histórico: Memorize que Catende foi 'filha' de Palmares administrativamente por décadas antes de se tornar cidade."},
-                // Simulado V
                 {id:21, q:"Simulado V - 1. Ao longo de sua história, Catende passou por diferentes ciclos econômicos... Acerca do tema, julgue as afirmativas a seguir:<br>( ) A emancipação política de Catende... marcou sua autonomia em relação a Palmares...<br>( ) A primeira menção histórica do nome 'Catende' na imprensa data de 1832...<br>( ) O ciclo econômico inicial foi exclusivamente o do açúcar...<br>( ) A lenda da 'Mulher da Sombrinha' tem suas raízes ligadas ao imaginário dos operários...<br><br>Assinale a alternativa que apresenta a sequência correta:", options:["A) V – V – F – V", "B) V – V – F – F", "C) F – V – V – F", "D) F – F – V – V"], correct:0, comment:"V-V-F-V: O item III é falso porque, antes da Usina, a Ferrovia (1882) foi um motor comercial gigante. Os Cabanos (1832) marcam o primeiro registro do nome."},
-                {id:22, q:"Simulado V - 2. Durante o século XX, o município de Catende passou por mudanças territoriais, com a perda de um antigo distrito. Assinale a alternativa correta.", options:["A) Os distritos de Belém de Maria e Laje Grande foram desmembrados", "B) O distrito de Laje Grande foi desmembrado em 1963", "C) O território de Belém de Maria passou a se chamar Laje Grande", "D) Belém de Maria foi desmembrado e tornou-se município autônomo em 1958"], correct:3, comment:"Desmembramento: Memorize que Belém de Maria se tornou cidade autônoma em 1958. Laje Grande continua sendo o único distrito oficial além da sede."},
+                {id:22, q:"Simulado V - 2. Durante o século XX, o município de Catende passou por mudanças territoriais, com a perda de um antigo distrito. Assinale a alternativa correta.", options:["A) Os distritos de Belém de Maria e Laje Grande foram desmembrados", "B) O distrito de Laje Grande foi desmembrado em 1963", "C) O território de Belém de Maria passou a se chamar Laje Grande", "D) Belém de Maria foi desmembrado e tornou-se município autônomo em 1958"], correct:3, comment:"Desmembramento: Memorize que Belém de Maria se tornou cidade autônoma em 1958."},
                 {id:23, q:"Simulado V - 3. Durante a organização administrativa do município, Catende passou por diferentes estágios antes da emancipação. Assinale a alternativa que apresenta a sequência CORRETA:", options:["A) II, depois I, depois III", "B) I, depois II, depois III", "C) III, depois II, depois I", "D) II, depois III, depois I"], correct:0, comment:"Escada Administrativa: 1º Distrito (1892) ➔ 2º Vila (1909) ➔ 3º Cidade/Emancipação (1928). Grave a ordem das leis: Mun. nº 1, Est. nº 991 e Est. nº 1.931."},
-                {id:24, q:"Simulado V - 4. O desenvolvimento socioeconômico de Catende... analise as assertivas:<br>I. O Tenente Costa Azevedo... atuou como um agente de urbanização...<br>II. O declínio da indústria canavieira... reflete-se na estrutura econômica contemporânea...<br>III. A Emenda à Lei Orgânica nº 12/2025... determina que metade dos recursos destinados a essas emendas (50%) deve ser aplicada em ações de saúde...<br><br>Está(ão) CORRETA(S):", options:["A) Apenas I e II", "B) Apenas I e III", "C) Apenas II e III", "D) I, II e III"], correct:3, comment:"Sinergia Pública: A questão une história e legislação. O Tenente fazia o que hoje é dever da prefeitura. A economia hoje é pública (57%) e as emendas exigem 50% para a saúde."},
-                {id:25, q:"Simulado V - 5. A Secretaria de Desenvolvimento Social de Catende... Considere os seguintes dados... qual conjunto de ações representa a resposta administrativa mais adequada?", options:["A) Foco exclusivo na atração de indústrias", "B) Fortalecimento da rede de proteção social (CRAS/CREAS), integração do CadÚnico a programas de moradia e investimentos robustos em Defesa Civil", "C) Expansão agressiva do setor de serviços", "D) Desvinculação total dos recursos"], correct:1, comment:"Resposta da Gestão: Com 91% de dependência financeira e 1/3 da população em risco, a prefeitura deve focar no Social e na Segurança (Defesa Civil)."}
+                {id:24, q:"Simulado V - 4. O desenvolvimento socioeconômico de Catende no século XX foi profundamente marcado pela relação simbiótica entre a iniciativa privada da Usina Catende e a ação do poder público municipal, que se consolidou após a emancipação. Com base nessa interação e na legislação atual, analise as assertivas:<br><br><b>I.</b> O Tenente Costa Azevedo, figura central no apogeu da Usina, atuou como um agente de urbanização ao construir escolas, um hospital e equipamentos de lazer, funções que, após a consolidação do Estado de Bem-Estar Social e da Constituição de 1988, passaram a ser atribuições precípuas do município, conforme previsto no Art. 30 da CF.<br><br><b>II.</b> O declínio da indústria canavieira, a partir da década de 1970, reflete-se na estrutura econômica contemporânea de Catende, onde o setor de Administração Pública responde por mais de 57% do Valor Adicionado Bruto (VAB), evidenciando uma transição de uma economia industrial para uma economia dependente de repasses e da máquina estatal local.<br><br><b>III.</b> A Emenda à Lei Orgânica nº 12/2025, que regula as emendas impositivas dos vereadores ao orçamento municipal, determina que metade dos recursos destinados a essas emendas (50%) deve ser aplicada em ações de saúde, reforçando o papel complementar do Legislativo na execução de uma competência constitucional comum entre União, Estados e Municípios.<br><br>Está(ão) CORRETA(S):", options:["A) Apenas I e II", "B) Apenas I e III", "C) Apenas II e III", "D) I, II e III"], correct:3, comment:"Sinergia Pública: A questão une história e legislação. O Tenente fazia o que hoje é dever da prefeitura. A economia hoje é pública (57%) e as emendas exigem 50% para a saúde."},
+                {id:25, q:"Simulado V - 5. A Secretaria de Desenvolvimento Social de Catende, ao planejar suas ações para 2026, utiliza uma análise integrada dos dados do Censo 2022 (IBGE) e do Caderno Regional da Mata Sul (SEPLAG). Essa análise revela desafios e prioridades específicas para o município.<br><br>Considere os seguintes dados e informações:<br><br><b>Dado 1:</b> População total: 32.156 hab. | Taxa de Urbanização: 78,5% | População em área de risco (IBGE): ~10.059 pessoas.<br><b>Dado 2:</b> Participação da Administração Pública no VAB: 57,78% | Dependência de receitas externas (2024): 91,07%.<br><b>Dado 3:</b> O relevo municipal é classificado como o mais acidentado da RD Mata Sul, com áreas montanhosas e escarpadas.<br><br>Com base nesse contexto, qual conjunto de ações representa a resposta administrativa mais adequada e factível da prefeitura diante do perfil socioeconômico e geográfico identificado?", options:["A) Foco exclusivo na atração de indústrias de alta tecnologia para áreas planas, visando reverter a desindustrialização...", "B) Fortalecimento da rede de proteção social (CRAS/CREAS), integração do CadÚnico a programas de moradia e investimentos robustos em Defesa Civil...", "C) Expansão agressiva do setor de serviços através da construção de grandes centros comerciais...", "D) Desvinculação total dos recursos da Administração Pública para investimento integral na agropecuária..."], correct:1, comment:"Resposta da Gestão: Com 91% de dependência financeira e 1/3 da população em risco, a prefeitura deve focar no Social e na Segurança (Defesa Civil)."}
             ]
         }
     };
 
     /* --- LÓGICA DA APLICAÇÃO (ATUALIZADA) --- */
-    let currentModuleKey = null; // Armazena a chave do módulo atual (ex: 'item_i')
+    let currentModuleKey = null; 
     let currentModule = null;
     let questionsQueue = [];
     let currentQuestionIndex = 0;
-    let cycleScore = 0; // Pontuação apenas do ciclo atual
+    let cycleScore = 0; 
 
-    // Carregar dados persistentes
     let globalCorrect = parseInt(localStorage.getItem('catende_correct') || '0');
     let globalWrong = parseInt(localStorage.getItem('catende_wrong') || '0');
-    // Armazena estatísticas por módulo: { "item_i": {c: 10, w: 2}, ... }
     let moduleStats = JSON.parse(localStorage.getItem('catende_module_stats') || '{}');
 
     function init() {
@@ -661,11 +656,9 @@
     }
 
     function updateDashboardUI() {
-        // Atualiza números globais no Header
         document.getElementById('total-correct').innerText = globalCorrect;
         document.getElementById('total-wrong').innerText = globalWrong;
 
-        // Calcula Porcentagem Global
         let totalAnswered = globalCorrect + globalWrong;
         let percent = 0;
         if (totalAnswered > 0) {
@@ -673,7 +666,6 @@
         }
         document.getElementById('total-percent').innerText = `${percent}%`;
 
-        // Lógica de Níveis (Nova Régua de Dificuldade)
         let rankName = "Inscrito";
         if (globalCorrect >= 20) rankName = "Concurseiro";
         if (globalCorrect >= 50) rankName = "Aprovado";
@@ -688,18 +680,16 @@
         grid.innerHTML = '';
 
         for (const [key, module] of Object.entries(DB)) {
-            // Pega estatísticas deste módulo específico
             const stats = moduleStats[key] || {c: 0, w: 0};
             const total = stats.c + stats.w;
             let modPercent = 0;
-            let statusClass = ""; // Classe padrão (cinza)
+            let statusClass = ""; 
             let badgeClass = "";
             let badgeText = "Sem dados";
 
             if (total > 0) {
                 modPercent = Math.round((stats.c / total) * 100);
                 
-                // Define as cores com base no desempenho
                 if (modPercent >= 80) {
                     statusClass = "card-good";
                     badgeClass = "perf-good";
@@ -746,9 +736,8 @@
         return "var(--error)";
     }
 
-    /* --- CONTROLE DE CICLOS --- */
     function openCycleModal(moduleKey) {
-        currentModuleKey = moduleKey; // Salva a chave para uso posterior
+        currentModuleKey = moduleKey; 
         currentModule = DB[moduleKey];
         document.getElementById('modal-cycle').style.display = 'flex';
     }
@@ -760,7 +749,6 @@
     function startQuiz(mode) {
         closeModal();
         
-        // Seleção de Questões
         if (mode === 'all') {
             questionsQueue = [...currentModule.questions];
         } else {
@@ -778,16 +766,13 @@
         renderQuestion();
     }
 
-    /* --- RENDERIZAÇÃO DO QUIZ --- */
     function renderQuestion() {
         const q = questionsQueue[currentQuestionIndex];
         
-        // Reset UI
         document.getElementById('q-feedback').style.display = 'none';
         document.getElementById('q-feedback').className = 'feedback-card';
         document.getElementById('btn-next').style.display = 'none';
         
-        // Content
         document.getElementById('q-progress').textContent = `Questão ${currentQuestionIndex + 1} de ${questionsQueue.length}`;
         document.getElementById('q-topic').textContent = currentModule.title;
         document.getElementById('q-text').innerHTML = q.q;
@@ -798,14 +783,13 @@
         q.options.forEach((opt, index) => {
             const btn = document.createElement('div');
             btn.className = 'option-btn';
-            btn.innerText = opt;
+            btn.innerHTML = opt; // Agora lê HTML
             btn.onclick = () => checkAnswer(index, btn);
             optionsDiv.appendChild(btn);
         });
     }
 
     function checkAnswer(selectedIndex, btnElement) {
-        // Bloquear cliques
         const allOpts = document.querySelectorAll('.option-btn');
         allOpts.forEach(el => el.style.pointerEvents = 'none');
 
@@ -813,7 +797,6 @@
         const isCorrect = selectedIndex === q.correct;
         const feedbackCard = document.getElementById('q-feedback');
 
-        // Inicializa estatística do módulo se não existir
         if (!moduleStats[currentModuleKey]) {
             moduleStats[currentModuleKey] = { c: 0, w: 0 };
         }
@@ -822,7 +805,7 @@
             btnElement.classList.add('correct');
             cycleScore++; 
             globalCorrect++; 
-            moduleStats[currentModuleKey].c++; // Incrementa acerto do módulo
+            moduleStats[currentModuleKey].c++; 
             
             feedbackCard.classList.add('success');
             document.getElementById('fb-title').innerText = "Correto! 🎯";
@@ -830,21 +813,18 @@
             btnElement.classList.add('wrong');
             allOpts[q.correct].classList.add('correct');
             globalWrong++;
-            moduleStats[currentModuleKey].w++; // Incrementa erro do módulo
+            moduleStats[currentModuleKey].w++; 
             
             feedbackCard.classList.add('error');
             document.getElementById('fb-title').innerText = "Atenção ao Erro 🛑";
         }
 
-        // Salvar tudo no Navegador
         localStorage.setItem('catende_correct', globalCorrect);
         localStorage.setItem('catende_wrong', globalWrong);
         localStorage.setItem('catende_module_stats', JSON.stringify(moduleStats));
         
-        // Atualizar Dashboard visualmente
         updateDashboardUI();
 
-        // Mostrar Comentário
         document.getElementById('fb-text').innerText = q.comment;
         feedbackCard.style.display = 'block';
         document.getElementById('btn-next').style.display = 'block';
@@ -869,9 +849,8 @@
         let labelText = "";
         let msg = "";
 
-        // Regra da Banca: Bloco de 5 vale 10 pontos (Peso 2)
         if (totalQ === 5) {
-            const grade = cycleScore * 2; // Acertos * 2
+            const grade = cycleScore * 2; 
             finalDisplay = grade.toFixed(1);
             labelText = "Nota Final (0 a 10)";
             
@@ -892,11 +871,10 @@
         document.getElementById('final-msg').innerText = msg;
     }
 
-    /* --- NAVEGAÇÃO E RESET --- */
     function goHome() {
         document.getElementById('screen-result').style.display = 'none';
         document.getElementById('screen-menu').classList.remove('hidden');
-        renderModules(); // Re-renderiza para atualizar as cores dos cards!
+        renderModules(); 
     }
 
     function retryCycle() {
@@ -910,13 +888,8 @@
         }
     }
 
-    // Inicializar
     init();
 </script>
 
 </body>
 </html>
-
-
-
-
