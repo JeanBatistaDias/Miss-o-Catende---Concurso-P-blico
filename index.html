@@ -365,6 +365,29 @@
         .mode-btn:hover { border-color: var(--primary); color: var(--primary); }
         .mode-btn.highlight { border-color: var(--accent); background: #fffbf5; }
 
+        /* BOTÃO SIMULADO EXPRESSO */
+        .btn-expresso {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(192, 57, 43, 0.3);
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s;
+        }
+        .btn-expresso:hover {
+            transform: scale(1.02);
+            background: linear-gradient(135deg, #c0392b, #a93226);
+        }
         /* TABELAS PARA QUESTÕES */
         .table-quiz {
             width: 100%;
@@ -440,6 +463,11 @@
                     <iframe src="https://docs.google.com/gview?url=https://jeanbatistadias.github.io/Miss-o-Catende---Concurso-P-blico/conhecimentosregionais.pdf&embedded=true" frameborder="0" scrolling="yes" title="Material de Apoio" style="width: 100%; height: 100%;"></iframe>
                 </div>
             </div>
+        </div>
+       <div style="padding: 0 20px;">
+            <button class="btn-expresso" onclick="startRandomQuiz()">
+                <span>🎯</span> Gerar Simulado Expresso (5 Questões)
+            </button>
         </div>
         <div class="module-grid" id="module-list"></div>
 
@@ -705,7 +733,8 @@
     let currentModule = null;
     let questionsQueue = [];
     let currentQuestionIndex = 0;
-    let cycleScore = 0; 
+    let cycleScore = 0;
+    let isRandomMode = false; /* <-- ESSA É A NOVA LINHA */
 
     let globalCorrect = parseInt(localStorage.getItem('catende_correct') || '0');
     let globalWrong = parseInt(localStorage.getItem('catende_wrong') || '0');
@@ -809,6 +838,7 @@
 
     function startQuiz(mode) {
         closeModal();
+        isRandomMode = false; // Desativa o modo aleatório
         
         if (mode === 'all') {
             questionsQueue = [...currentModule.questions];
@@ -817,6 +847,32 @@
             questionsQueue = shuffled.slice(0, mode);
         }
 
+        currentQuestionIndex = 0;
+        cycleScore = 0;
+
+        document.getElementById('screen-menu').classList.add('hidden');
+        document.getElementById('screen-result').classList.add('hidden');
+        document.getElementById('screen-quiz').classList.add('active');
+        
+        renderQuestion();
+    }
+
+    /* NOVA FUNÇÃO: GERA O SIMULADO EXPRESSO MISTURADO */
+    function startRandomQuiz() {
+        isRandomMode = true; // Ativa o modo aleatório
+        currentModuleKey = 'simulado_expresso'; 
+        currentModule = { title: "Simulado Padrão Banca (Misto)" }; // Muda o título lá em cima
+        
+        let allQuestions = [];
+        // Junta todas as questões de todas as matérias numa urna só
+        for (const key in DB) {
+            allQuestions = allQuestions.concat(DB[key].questions);
+        }
+        
+        // Embaralha a urna inteira e pesca 5
+        let shuffled = allQuestions.sort(() => 0.5 - Math.random());
+        questionsQueue = shuffled.slice(0, 5); 
+        
         currentQuestionIndex = 0;
         cycleScore = 0;
 
@@ -866,7 +922,11 @@
             btnElement.classList.add('correct');
             cycleScore++; 
             globalCorrect++; 
-            moduleStats[currentModuleKey].c++; 
+            
+            // Só salva estatística no card se NÃO for o modo aleatório
+            if (!isRandomMode) {
+                moduleStats[currentModuleKey].c++; 
+            }
             
             feedbackCard.classList.add('success');
             document.getElementById('fb-title').innerText = "Correto! 🎯";
@@ -874,7 +934,11 @@
             btnElement.classList.add('wrong');
             allOpts[q.correct].classList.add('correct');
             globalWrong++;
-            moduleStats[currentModuleKey].w++; 
+            
+            // Só salva estatística no card se NÃO for o modo aleatório
+            if (!isRandomMode) {
+                moduleStats[currentModuleKey].w++; 
+            }
             
             feedbackCard.classList.add('error');
             document.getElementById('fb-title').innerText = "Atenção ao Erro 🛑";
@@ -939,7 +1003,12 @@
     }
 
     function retryCycle() {
-        startQuiz(questionsQueue.length);
+        // O botão 'Refazer' agora é inteligente!
+        if (isRandomMode) {
+            startRandomQuiz(); // Se for aleatório, gera um novo aleatório
+        } else {
+            startQuiz(questionsQueue.length); // Se for normal, refaz a matéria
+        }
     }
 
     function resetApp() {
