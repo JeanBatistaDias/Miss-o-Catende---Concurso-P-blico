@@ -405,6 +405,47 @@
             font-weight: bold;
         }
 
+        /* SISTEMA DE MEMÓRIA E NAVEGAÇÃO */
+        .resume-banner {
+            background-color: #f39c12;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+            display: none; /* Fica escondido até o JS ativar */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: pulse 2s infinite;
+        }
+        .resume-banner:hover {
+            background-color: #e67e22;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .btn-prev {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            display: none; /* Escondido na primeira questão */
+        }
+        .btn-prev:hover {
+            background-color: #7f8c8d;
+        }
+        
         /* ADAPTAÇÃO EXCLUSIVA PARA PC (TELAS GRANDES) */
         @media (min-width: 850px) {
             .app-container {
@@ -451,6 +492,9 @@
     </div>
 
    <div id="screen-menu">
+       <div id="resume-banner" class="resume-banner" onclick="resumeSession()">
+            ⚠️ Você tem um simulado em andamento. Clique aqui para continuar de onde parou!
+        </div>
         <div style="padding: 20px 20px 15px 20px;">
             <h3 style="margin: 0;">Treinamento Digital</h3>
             <p style="color: #666; font-size: 0.9rem;">As cores indicam onde você precisa focar.</p>
@@ -459,7 +503,7 @@
         <div class="material-section">
             <div class="material-box">
                 <h3 style="margin-top: 0; color: var(--primary); font-size: 1.1rem;">📖 Material de Apoio</h3>
-                <div class="-container">
+                <div class="iframe-container">
                     <iframe src="https://docs.google.com/gview?url=https://jeanbatistadias.github.io/Miss-o-Catende---Concurso-P-blico/conhecimentosregionais.pdf&embedded=true" frameborder="0" scrolling="yes" title="Material de Apoio" style="width: 100%; height: 100%;"></iframe>
                 </div>
             </div>
@@ -492,7 +536,10 @@
             <div class="feedback-content" id="fb-text"></div>
         </div>
 
-        <button id="btn-next" class="btn-next" onclick="nextQuestion()">Próxima ➔</button>
+        <div class="nav-buttons">
+            <button id="btn-prev" class="btn-prev" onclick="prevQuestion()">⬅️ Voltar</button>
+            <button id="btn-next" class="btn-primary" onclick="nextQuestion()" style="display: none; padding: 12px 20px; border-radius: 5px; font-weight: bold;">Próxima ➔</button>
+        </div>
     </div>
 
     <div id="screen-result" class="result-screen hidden">
@@ -735,15 +782,11 @@
     let currentQuestionIndex = 0;
     let cycleScore = 0;
     let isRandomMode = false; /* <-- ESSA É A NOVA LINHA */
+    let userAnswers = []; /* <-- NOVA VARIÁVEL: Guarda as respostas dadas */
 
     let globalCorrect = parseInt(localStorage.getItem('catende_correct') || '0');
     let globalWrong = parseInt(localStorage.getItem('catende_wrong') || '0');
     let moduleStats = JSON.parse(localStorage.getItem('catende_module_stats') || '{}');
-
-    function init() {
-        updateDashboardUI();
-        renderModules();
-    }
 
     function updateDashboardUI() {
         document.getElementById('total-correct').innerText = globalCorrect;
@@ -836,9 +879,45 @@
         document.getElementById('modal-cycle').style.display = 'none';
     }
 
+    // FUNÇÕES DE MEMÓRIA (AUTOSAVE)
+    function saveSession() {
+        const sessionData = {
+            currentModuleKey, currentModule, questionsQueue, 
+            currentQuestionIndex, cycleScore, isRandomMode, userAnswers
+        };
+        localStorage.setItem('catende_active_session', JSON.stringify(sessionData));
+    }
+
+    function clearSession() {
+        localStorage.removeItem('catende_active_session');
+        document.getElementById('resume-banner').style.display = 'none';
+    }
+
+    function resumeSession() {
+        const data = JSON.parse(localStorage.getItem('catende_active_session'));
+        if(data) {
+            currentModuleKey = data.currentModuleKey;
+            currentModule = data.currentModule;
+            questionsQueue = data.questionsQueue;
+            currentQuestionIndex = data.currentQuestionIndex;
+            cycleScore = data.cycleScore;
+            isRandomMode = data.isRandomMode;
+            userAnswers = data.userAnswers || [];
+
+            document.getElementById('screen-menu').classList.add('hidden');
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.add('active');
+            
+            renderQuestion();
+        }
+    }
+
+    // INÍCIO DOS QUIZZES
     function startQuiz(mode) {
         closeModal();
-        isRandomMode = false; // Desativa o modo aleatório
+        isRandomMode = false; 
+        userAnswers = []; // Zera as respostas antigas
+        clearSession(); // Limpa qualquer save anterior
         
         if (mode === 'all') {
             questionsQueue = [...currentModule.questions];
@@ -857,19 +936,18 @@
         renderQuestion();
     }
 
-    /* NOVA FUNÇÃO: GERA O SIMULADO EXPRESSO MISTURADO */
     function startRandomQuiz() {
-        isRandomMode = true; // Ativa o modo aleatório
+        isRandomMode = true; 
         currentModuleKey = 'simulado_expresso'; 
-        currentModule = { title: "Simulado Padrão Banca (Misto)" }; // Muda o título lá em cima
+        currentModule = { title: "Simulado Padrão Banca (Misto)" }; 
+        userAnswers = []; 
+        clearSession(); 
         
         let allQuestions = [];
-        // Junta todas as questões de todas as matérias numa urna só
         for (const key in DB) {
             allQuestions = allQuestions.concat(DB[key].questions);
         }
         
-        // Embaralha a urna inteira e pesca 5
         let shuffled = allQuestions.sort(() => 0.5 - Math.random());
         questionsQueue = shuffled.slice(0, 5); 
         
@@ -883,12 +961,23 @@
         renderQuestion();
     }
 
+    // RENDERIZAR E RESPONDER
     function renderQuestion() {
         const q = questionsQueue[currentQuestionIndex];
+        const feedbackCard = document.getElementById('q-feedback');
+        const btnNext = document.getElementById('btn-next');
+        const btnPrev = document.getElementById('btn-prev');
         
-        document.getElementById('q-feedback').style.display = 'none';
-        document.getElementById('q-feedback').className = 'feedback-card';
-        document.getElementById('btn-next').style.display = 'none';
+        feedbackCard.style.display = 'none';
+        feedbackCard.className = 'feedback-card';
+        btnNext.style.display = 'none';
+        
+        // Controle inteligente do botão Voltar
+        if (currentQuestionIndex > 0) {
+            btnPrev.style.display = 'block';
+        } else {
+            btnPrev.style.display = 'none';
+        }
         
         document.getElementById('q-progress').textContent = `Questão ${currentQuestionIndex + 1} de ${questionsQueue.length}`;
         document.getElementById('q-topic').textContent = currentModule.title;
@@ -897,13 +986,43 @@
         const optionsDiv = document.getElementById('q-options');
         optionsDiv.innerHTML = '';
 
+        // Verifica se a questão atual já tem resposta gravada na memória
+        const answeredIndex = userAnswers[currentQuestionIndex];
+        const isAlreadyAnswered = answeredIndex !== undefined && answeredIndex !== null;
+
         q.options.forEach((opt, index) => {
             const btn = document.createElement('div');
             btn.className = 'option-btn';
-            btn.innerHTML = opt; // Agora lê HTML
-            btn.onclick = () => checkAnswer(index, btn);
+            btn.innerHTML = opt; 
+            
+            if (isAlreadyAnswered) {
+                btn.style.pointerEvents = 'none'; // Trava os cliques
+                if (index === q.correct) {
+                    btn.classList.add('correct');
+                } else if (index === answeredIndex) {
+                    btn.classList.add('wrong');
+                }
+            } else {
+                btn.onclick = () => checkAnswer(index, btn);
+            }
             optionsDiv.appendChild(btn);
         });
+
+        if (isAlreadyAnswered) {
+            // Se já respondida, remonta o gabarito na tela
+            if (answeredIndex === q.correct) {
+                feedbackCard.classList.add('success');
+                document.getElementById('fb-title').innerText = "Correto! 🎯";
+            } else {
+                feedbackCard.classList.add('error');
+                document.getElementById('fb-title').innerText = "Atenção ao Erro 🛑";
+            }
+            document.getElementById('fb-text').innerText = q.comment;
+            feedbackCard.style.display = 'block';
+            btnNext.style.display = 'block';
+        }
+        
+        saveSession(); // A cada passo, salva no navegador!
     }
 
     function checkAnswer(selectedIndex, btnElement) {
@@ -914,6 +1033,8 @@
         const isCorrect = selectedIndex === q.correct;
         const feedbackCard = document.getElementById('q-feedback');
 
+        userAnswers[currentQuestionIndex] = selectedIndex; // Grava a resposta do usuário
+
         if (!moduleStats[currentModuleKey]) {
             moduleStats[currentModuleKey] = { c: 0, w: 0 };
         }
@@ -922,11 +1043,7 @@
             btnElement.classList.add('correct');
             cycleScore++; 
             globalCorrect++; 
-            
-            // Só salva estatística no card se NÃO for o modo aleatório
-            if (!isRandomMode) {
-                moduleStats[currentModuleKey].c++; 
-            }
+            if (!isRandomMode) moduleStats[currentModuleKey].c++; 
             
             feedbackCard.classList.add('success');
             document.getElementById('fb-title').innerText = "Correto! 🎯";
@@ -934,11 +1051,7 @@
             btnElement.classList.add('wrong');
             allOpts[q.correct].classList.add('correct');
             globalWrong++;
-            
-            // Só salva estatística no card se NÃO for o modo aleatório
-            if (!isRandomMode) {
-                moduleStats[currentModuleKey].w++; 
-            }
+            if (!isRandomMode) moduleStats[currentModuleKey].w++; 
             
             feedbackCard.classList.add('error');
             document.getElementById('fb-title').innerText = "Atenção ao Erro 🛑";
@@ -949,10 +1062,19 @@
         localStorage.setItem('catende_module_stats', JSON.stringify(moduleStats));
         
         updateDashboardUI();
+        saveSession(); // Salva estado atualizado pós-resposta
 
         document.getElementById('fb-text').innerText = q.comment;
         feedbackCard.style.display = 'block';
         document.getElementById('btn-next').style.display = 'block';
+    }
+
+    // NAVEGAÇÃO
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            renderQuestion();
+        }
     }
 
     function nextQuestion() {
@@ -964,7 +1086,10 @@
         }
     }
 
+    // FINALIZAÇÃO
     function finishQuiz() {
+        clearSession(); // Limpa a memória pois o quiz acabou
+        
         document.getElementById('screen-quiz').classList.remove('active');
         document.getElementById('screen-result').classList.remove('hidden');
         document.getElementById('screen-result').style.display = 'block';
@@ -1003,11 +1128,10 @@
     }
 
     function retryCycle() {
-        // O botão 'Refazer' agora é inteligente!
         if (isRandomMode) {
-            startRandomQuiz(); // Se for aleatório, gera um novo aleatório
+            startRandomQuiz(); 
         } else {
-            startQuiz(questionsQueue.length); // Se for normal, refaz a matéria
+            startQuiz(questionsQueue.length); 
         }
     }
 
@@ -1018,11 +1142,30 @@
         }
     }
 
+    // INICIALIZAÇÃO DO SITE
+    function init() {
+        const savedC = localStorage.getItem('catende_correct');
+        const savedW = localStorage.getItem('catende_wrong');
+        const savedStats = localStorage.getItem('catende_module_stats');
+
+        if(savedC) globalCorrect = parseInt(savedC);
+        if(savedW) globalWrong = parseInt(savedW);
+        if(savedStats) moduleStats = JSON.parse(savedStats);
+
+        updateDashboardUI();
+        renderModules();
+        
+        // Se a página for atualizada e tiver sessão ativa, mostra o banner!
+        if(localStorage.getItem('catende_active_session')) {
+            document.getElementById('resume-banner').style.display = 'block';
+        }
+    }
+
     init();
 </script>
-
 </body>
 </html>
+
 
 
 
