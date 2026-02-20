@@ -382,6 +382,22 @@
             font-weight: bold;
         }
 
+        /* ADAPTAÇÃO EXCLUSIVA PARA PC (TELAS GRANDES) */
+        @media (min-width: 850px) {
+            .app-container {
+                max-width: 1100px; /* Expande a largura do site no monitor */
+            }
+            .iframe-container {
+                height: 85vh; /* Estica o PDF para usar mais altura da tela */
+            }
+            .material-section {
+                padding: 0 40px; /* Dá uma margem mais elegante nas laterais */
+            }
+            .module-grid {
+                grid-template-columns: repeat(3, 1fr); /* Coloca os cards em 3 colunas no PC */
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -938,6 +954,7 @@
 
 </body>
 </html>
+
 
 
 
